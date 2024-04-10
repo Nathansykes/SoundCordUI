@@ -1,0 +1,33 @@
+.content {
+  margin-top: 135px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1500px;
+  padding-left:20px;
+  padding-right:20px;
+}
+
+@media (min-width: 1280px) {
+  .content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@keyframes placeHolderShimmer{
+  0%{
+      background-position: -468px 0
+  }
+  100%{
+      background-position: 468px 0
+  }
+}
+.placeholder{
+    animation-duration: 1.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to bottom right, #555 10%, #999 18%, #555 33%);
+    background-size: 1000px 1000px;
+}
