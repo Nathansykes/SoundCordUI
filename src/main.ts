@@ -3,10 +3,10 @@ import App from './App.vue'
 import router from './router'
 //import plugin from './plugins/config'
 
-//import './assets/bootstrap/js/bootstrap.bundle.min.js';
+import './assets/bootstrap/js/bootstrap.bundle.min.js';
 
-//import './assets/bootstrap/css/bootstrap.min.css';
-import './assets/bootstrap/bootstrap-zephyr.css';
+import './assets/bootstrap/css/bootstrap.min.css';
+import './assets/bootstrap/bootstrap-litera.css';
 import './assets/bootstrap/icons/bootstrap-icons.min.css';
 import './assets/css/main.css';
 

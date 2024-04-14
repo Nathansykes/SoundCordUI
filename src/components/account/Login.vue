@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import ApiAccountService from '../../../services/api-service'
+import ApiAccountService from '../../services/api-service'
 import {ref } from 'vue';
 
 var username : string;

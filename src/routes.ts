@@ -4,7 +4,7 @@ const routes = [
         path: "/",
         alias: "/",
         name: "Home",
-        component: () => import("./pages/home/components/Home.vue"),
+        component: () => import("./components/home/Home.vue"),
     },
     {
         //account section
@@ -12,7 +12,7 @@ const routes = [
         children:[
             {
                 path: "login",
-                component: () => import("./pages/account/components/Login.vue"),
+                component: () => import("./components/account/Login.vue"),
             }
         ]
     }
