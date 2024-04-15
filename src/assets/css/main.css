@@ -5,6 +5,48 @@ body {
   --inner-content-height: initial;
 }
 
+
+input.text-bg-light::placeholder {
+  color: RGBA(0, 0, 0, 0.5); ; 
+}
+
+#main-navbar{
+  display:inline-block; 
+  position: fixed; 
+  width: 100vw;
+}
+
+#main-content{
+  display:inline-block;
+  min-width: var(--main-content-width);
+}
+
+#main-sidebar{
+  display:inline-block;
+}
+
+#main-inner-content{
+  padding-left: 20px;
+  padding-top: 10px;
+  min-width: 100%;
+  margin-top: var(--navbar-height);
+  height: var(--inner-content-height);
+}
+
+@media (min-width: 992px) {
+  #main-navbar{
+    width: var(--main-content-width);
+  }
+  #main-content{
+    margin-left: 280px;
+  }
+  #main-sidebar{
+    position: fixed;
+    top: 0;
+  }
+}
+
+
 @keyframes placeHolderShimmer{
   0%{
       background-position: -468px 0
@@ -24,6 +66,6 @@ body {
 }
 
 
-.padding-none{
+.padding-none {
     padding: 0 !important;
 }
