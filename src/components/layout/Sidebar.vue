@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import store from '../../store';
+import router from '@/router';
+import store, { ApplicationUser } from '../../store';
+
+function logOut(){
+  ApplicationUser.logOut();
+  window.location.href = router.resolve({name: 'Login'}).href;
+}
 
 </script>
 
@@ -40,7 +46,7 @@ import store from '../../store';
               <li><a class="dropdown-item" href="#">Switch Group</a></li>
               <li><router-link to="/settings" class="dropdown-item" aria-current="page">Settings</router-link></li>
               <li><hr class="dropdown-divider"></li>
-              <li><router-link to="/account/logout" class="dropdown-item" aria-current="page">Log Out</router-link></li>
+              <li><a @click="logOut" href="#" class="dropdown-item" aria-current="page">Log Out</a></li>
             </ul>
           </div>
         </div>

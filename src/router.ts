@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import store from './store';
+import store, { ApplicationUser } from './store';
 import routes from './routes';
 
 const router = createRouter({
@@ -24,7 +24,7 @@ router.afterEach((to, from) => {
 });
 
 router.beforeEach(async (to, from, next) => {
-    if (to.name !== 'Login' && to.name !== 'Register' && !store.isLoggedIn){
+    if (to.name !== 'Login' && to.name !== 'Register' && !ApplicationUser.isLoggedIn()){
         next({ name: 'Login' });
     }
     else if (!to.matched.length) {

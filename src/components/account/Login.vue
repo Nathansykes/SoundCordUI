@@ -1,24 +1,43 @@
 <script setup lang="ts">
-import ApiAccountService from "../../services/api-service";
-import { ref } from "vue";
+import router from "@/router";
+import ApiAccountService from "../../services/api-account-service";
+import { ref, onMounted, defineProps } from "vue";
+
+const props = defineProps({
+  fromRegister: Boolean,
+})
 
 var username: string;
 var password: string;
 
-var loginToken = ref("");
+var errors = ref([] as string[]);
 
 async function loginSubmit(formSubmitEvent: Event) {
   const form = formSubmitEvent.target as HTMLFormElement;
     formSubmitEvent.preventDefault();
   //check form is valid 
-  if (form.checkValidity() === false) {
-    form.classList.add('was-validated');
+  if (!validateForm(form)) {
     formSubmitEvent.stopPropagation();
     return;
   }
   const result = await ApiAccountService.Login(username, password);
-  loginToken.value = result;
+  if (result.success){
+    window.location.href = router.resolve({name: 'Home'}).href;
+  } else {
+    errors.value = result.errors;
+  }
 }
+
+function validateForm(form: HTMLFormElement) : boolean {
+    let htmlValid = form.checkValidity();
+    form.classList.add('was-validated');
+    return htmlValid;
+}
+
+onMounted(() => {
+});
+
+
 </script>
 
 <template>
@@ -32,6 +51,7 @@ async function loginSubmit(formSubmitEvent: Event) {
           <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 ">
             <form class="needs-validation" @submit="loginSubmit" novalidate >
                 <h1>Login</h1>
+                <p v-if="props.fromRegister">Registration successful, please login</p>
               <div class="form-outline mb-4">
                 <label class="form-label" for="email" title="Email address" ></label>
                 <input v-model="username" type="email" name="email" id="email" class="form-control form-control-lg text-bg-light" placeholder="Enter a valid email address" autocomplete="true" required  />
@@ -46,6 +66,11 @@ async function loginSubmit(formSubmitEvent: Event) {
                     Please enter a password
                   </div>
               </div>
+                <div class="text-center text-danger" v-if="errors.length > 0">
+                    <ul>
+                    <li v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
+                </div>
               <div class="text-center text-lg-start mt-4 pt-2">
                 <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Login</button>
                 <p class="small mt-2 pt-1 mb-0">
@@ -58,10 +83,6 @@ async function loginSubmit(formSubmitEvent: Event) {
         </div>
       </div>
     </section>
-  </div>
-
-  <div>
-    <p>{{ loginToken }}</p>
   </div>
 </template>
 

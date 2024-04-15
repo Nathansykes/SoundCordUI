@@ -2,7 +2,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import Sidebar from './components/layout/Sidebar.vue';
 import Navbar from './components/layout/Navbar.vue';
-import store from './store';
+import store, { ApplicationUser } from './store';
 
 onMounted(() => {
   window.addEventListener('resize', onLoadOrResizse);
@@ -30,7 +30,7 @@ function onLoadOrResizse() {
 
 <template>
 
-<div v-if="store.isLoggedIn">
+<div v-if="ApplicationUser.isLoggedIn()">
   <Sidebar />
   <div id="main-content" style="">
     <Navbar />

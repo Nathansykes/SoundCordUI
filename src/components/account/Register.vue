@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import ApiAccountService from "../../services/api-service";
-import { ref, onMounted } from "vue";
+import router from "@/router";
+import ApiAccountService from "../../services/api-account-service";
+import { ref, onMounted, defineProps } from "vue";
+
 
 var username: string;
 var password: string;
 var confirmpassword: string;
 
-var loginToken = ref("");
+var errors = ref([] as string[]);
 
 async function registerSubmit(formSubmitEvent: Event) {
   const form = formSubmitEvent.target as HTMLFormElement;
@@ -17,8 +19,12 @@ async function registerSubmit(formSubmitEvent: Event) {
     formSubmitEvent.stopPropagation();
     return;
   }
-  //const result = await ApiAccountService.Login(username, password);
-  //loginToken.value = result;
+  const result = await ApiAccountService.Register(username, password);
+  if(result.success){
+    router.push({name: 'Login', params: { fromRegister: 'true'} });
+  } else {
+    errors.value = result.errors;
+  }
 }
 
 function validateForm(form: HTMLFormElement) : boolean {
@@ -102,6 +108,11 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                     Password must match
                   </div>
               </div>
+              <div class="text-center text-danger" v-if="errors.length > 0">
+                <ul>
+                <li v-for="error in errors" :key="error">{{ error }}</li>
+                </ul>
+            </div>
               <div class="text-center text-lg-start mt-4 pt-2">
                 <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Register</button>
                 <p class="small mt-2 pt-1 mb-0">
@@ -116,9 +127,6 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
     </section>
   </div>
 
-  <div>
-    <p>{{ loginToken }}</p>
-  </div>
 </template>
 
 <style scoped>
