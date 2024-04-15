@@ -82,7 +82,7 @@ export class ApiAccountService {
   }
 
   public async GetUserDetails(): Promise<UserInfoModel> {
-    const url = "/account/getcurrentuser";
+    const url = "/account/user";
     const token = ApplicationUser.getToken()!;
     const response = await apiAccountClient.get(url, {
       headers: { Authorization: `Bearer ${token?.accessToken}` },
