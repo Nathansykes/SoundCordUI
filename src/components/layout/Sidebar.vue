@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import router from '@/router';
 import store, { ApplicationUser } from '../../store';
+import { ref, onMounted } from 'vue';
 
-function logOut(){
+const currentUser = ref(ApplicationUser.getCurrentUser());
+
+function logOut() {
   ApplicationUser.logOut();
   window.location.href = router.resolve({name: 'Login'}).href;
 }
+
+onMounted(() => {
+  window.addEventListener('userstorage', (event) => {
+    currentUser.value = ApplicationUser.getCurrentUser();
+  });
+});
 
 </script>
 
@@ -40,7 +49,7 @@ function logOut(){
           
           <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-              <strong>User Name</strong>
+              <strong>{{ currentUser?.userName }}</strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
               <li><a class="dropdown-item" href="#">Switch Group</a></li>

@@ -33,11 +33,11 @@ export class TokenResponse {
 }
 
 export class UserInfoModel{
-    public username: string;
+    public userName: string;
     public roles: string[];
     
-    constructor(username: string, roles: string[]){
-        this.username = username;
+    constructor(userName: string, roles: string[]){
+        this.userName = userName;
         this.roles = roles;
     }
 }
@@ -89,7 +89,7 @@ export class ApiAccountService {
     });
 
     const data: UserInfoModel = response.data;
-    ApplicationUser.setCurrentUser(new ApplicationUser(data.username, data.roles, token));
+    ApplicationUser.setCurrentUser(new ApplicationUser(data.userName, data.roles, token));
     return data;
   }
 

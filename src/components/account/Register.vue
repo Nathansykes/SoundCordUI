@@ -21,7 +21,7 @@ async function registerSubmit(formSubmitEvent: Event) {
   }
   const result = await ApiAccountService.Register(username, password);
   if(result.success){
-    router.push({name: 'Login', params: { fromRegister: 'true'} });
+    router.push({name: 'Login', query: { fromRegister: 'true'} });
   } else {
     errors.value = result.errors;
   }

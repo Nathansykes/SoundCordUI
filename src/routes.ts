@@ -13,13 +13,12 @@ const routes = [
             {
                 path: "login",
                 name: "Login",
-                props: true,
+                props: (route: { query: { fromRegister: boolean; }; }) => ({ query: route.query.fromRegister }),
                 component: () => import("./components/account/Login.vue"),
             },
             {
                 path: "register",
                 name: "Register",
-                props: true,
                 component: () => import("./components/account/Register.vue"),
             }
         ]

@@ -25,6 +25,7 @@ export class ApplicationUser {
     }
 
     private static setJsonLocalStorageItem<T>(key: string, value: T): void {
+        window.dispatchEvent(new Event('userstorage'));
         const jsonString = JSON.stringify(value);
         const encodedString = btoa(jsonString);
         localStorage.setItem(key, encodedString);

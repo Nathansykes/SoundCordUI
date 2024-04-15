@@ -2,10 +2,9 @@
 import router from "@/router";
 import ApiAccountService from "../../services/api-account-service";
 import { ref, onMounted, defineProps } from "vue";
+import { useRoute } from "vue-router";
 
-const props = defineProps({
-  fromRegister: Boolean,
-})
+const fromRegister =  useRoute().query.fromRegister === 'true';
 
 var username: string;
 var password: string;
@@ -51,7 +50,7 @@ onMounted(() => {
           <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 ">
             <form class="needs-validation" @submit="loginSubmit" novalidate >
                 <h1>Login</h1>
-                <p v-if="props.fromRegister">Registration successful, please login</p>
+                <p class="text-success" v-if="fromRegister">Registration successful, please login</p>
               <div class="form-outline mb-4">
                 <label class="form-label" for="email" title="Email address" ></label>
                 <input v-model="username" type="email" name="email" id="email" class="form-control form-control-lg text-bg-light" placeholder="Enter a valid email address" autocomplete="true" required  />
