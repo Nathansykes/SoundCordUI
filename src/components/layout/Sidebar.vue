@@ -20,7 +20,7 @@ onMounted(() => {
 
 <template>
     <div id="main-sidebar">
-        <div :class="(store.isMobile ? 'offcanvas' : '')  +' offcanvas-start offcanvas-body d-flex flex-column flex-shrink-0 p-3 text-white bg-dark'" style="width: 280px;height: 100vh;" tabindex="-1" id="main-sidebar-offcanvas" aria-labelledby="main-sidebar-offcanvasLabel">
+        <div :class="(store.isMobile ? 'offcanvas' : '')  +' offcanvas-start offcanvas-body d-flex flex-column flex-shrink-0 p-3 text-white bg-dark'" style="width: 280px;height: 100%;" tabindex="-1" id="main-sidebar-offcanvas" aria-labelledby="main-sidebar-offcanvasLabel">
           <div class="align-items-center text-white text-decoration-none">
             <span class="fs-4" style="margin-top:4px">
               Group Name
