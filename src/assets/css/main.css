@@ -1,3 +1,10 @@
+body {
+  --scrollbar-width: initial; 
+  --main-content-width: initial; 
+  --navbar-height: initial; 
+  --inner-content-height: initial;
+}
+
 @keyframes placeHolderShimmer{
   0%{
       background-position: -468px 0

@@ -15,13 +15,14 @@ onMounted(() => {
 
 function onLoadOrResizse() {
   isMobile.value = window.innerWidth < 992;
-  document.documentElement.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
-  document.documentElement.style.setProperty('--main-content-width', "calc(100vw - (280px + var(--scrollbar-width)))");
-  
+
+  document.body.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
+  document.body.style.setProperty('--main-content-width', "calc(100vw - (280px + var(--scrollbar-width)))");
+    
   const navbarHeight = document.getElementById("main-navbar")?.offsetHeight;
   if (navbarHeight){
-    document.documentElement.style.setProperty('--navbar-height',  `${navbarHeight}px`);
-    document.documentElement.style.setProperty('--inner-content-height', `calc(100vh - ${navbarHeight}px)`);
+    document.body.style.setProperty('--navbar-height',  `${navbarHeight}px`);
+    document.body.style.setProperty('--inner-content-height', `calc(100vh - ${navbarHeight}px)`);
   }
 }
 
