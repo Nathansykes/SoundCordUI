@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { onMounted } from 'vue';
 import Sidebar from './components/layout/Sidebar.vue';
 import Navbar from './components/layout/Navbar.vue';
 import store from './store';

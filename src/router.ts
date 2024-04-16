@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import store from './store';
 import ApplicationUser from './application-user';
 import routes from './routes';
 
@@ -11,20 +10,7 @@ const router = createRouter({
 });
 
 
-router.afterEach((to, from) => {
-    let titleMetaEle = document.head.querySelector('title');
-    if (titleMetaEle){
-        titleMetaEle.text = "Project - " + to.name?.toString();
-    }
-    else {
-        titleMetaEle = document.createElement('title');
-        titleMetaEle.text = "Project - " + to.name?.toString();
-        document.head.appendChild(titleMetaEle);
-    }
-
-});
-
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
     if (to.name !== 'Login' && to.name !== 'Register' && !ApplicationUser.isLoggedIn()){
         next({ name: 'Login' });
     }

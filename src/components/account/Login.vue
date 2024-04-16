@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from "@/router";
 import ApiAccountService from "../../api/services/account-service";
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 const fromRegister =  useRoute().query.fromRegister === 'true';

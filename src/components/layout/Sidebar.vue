@@ -14,7 +14,7 @@ function logOut() {
 }
 
 onMounted(() => {
-    window.addEventListener('userstorage', (event) => {
+    window.addEventListener('userstorage', () => {
         currentUser.value = ApplicationUser.getCurrentUser();
     });
 });

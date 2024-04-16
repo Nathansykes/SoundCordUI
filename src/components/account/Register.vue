@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from "@/router";
 import ApiAccountService from "../../api/services/account-service";
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 
 
 var username: string;
@@ -50,7 +50,7 @@ onMounted(() => {
     const form = document.getElementById('registerForm') as HTMLFormElement;
     const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
-        input.addEventListener('change', (event) => {
+        input.addEventListener('change', () => {
             var inputsCurrent = form.querySelectorAll('input');
             if(!isAnyEmpty(inputsCurrent)) {
                 validateForm(form);
