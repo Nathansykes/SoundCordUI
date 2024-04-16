@@ -5,9 +5,9 @@
 
 
 <template>
-    <div>
-        <h1>Project</h1>
-    </div>
+    <span>
+        <h1 class="invisible">Home</h1>
+    </span>
 </template>
   
 <style scoped>

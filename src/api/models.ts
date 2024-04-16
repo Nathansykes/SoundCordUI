@@ -1,44 +1,58 @@
-export class Group {
-    constructor(id: string, name: string, users: string[] = []) {
+export class IdNameModel {
+    constructor(id: string, name: string) {
         this.id = id;
         this.name = name;
+    }
+
+    public id: string;
+    public name: string;
+
+}
+
+export class Group {
+    constructor(id: string, groupName: string, users: string[] = []) {
+        this.id = id;
+        this.groupName = groupName;
         this.users = users;
     }
     public id: string;
-    public name: string;
+    public groupName: string;
     public users: string[] = [];
 }
 
 export class Channel {
-    constructor(id: string, name: string, groupId: string) {
+    constructor(id: string, channelName: string, groupId: string, song: IdNameModel | null = null) {
         this.id = id;
-        this.name = name;
+        this.channelName = channelName;
         this.groupId = groupId;
+        this.song = song;
     }
-
+    
     public groupId: string;
     public id: string;
-    public name: string;
+    public channelName: string;
+    public song: IdNameModel | null = null;
 }
 
+
 export class Song {
-    constructor (id: string, name: string, channelId: string, createByUser: string) {
+    constructor (id: string, songName: string, channelId: string, createByUser: string) {
         this.id = id;
-        this.name = name;
+        this.songName = songName;
         this.channelId = channelId;
         this.createByUser = createByUser;
     }
 
     public id: string;
-    public name: string;
+    public songName: string;
     public channelId: string;
     public createByUser: string;
 }
 
 export class SongRevision {
-    constructor(id: string, song: Song, createdByUser: Song, revision: number, createdDateUtc: Date, fileMetadataId: string, lengthMilliseconds: number) {
+    constructor(id: string, songId: string, createdByUser: Song, revision: number, createdDateUtc: Date, fileMetadataId: string, lengthMilliseconds: number) {
         this.id = id;
-        this.song = song;
+        this.songId = songId;
         this.createdByUser = createdByUser;
         this.revision = revision;
         this.createdDateUtc = createdDateUtc;
@@ -47,7 +61,7 @@ export class SongRevision {
     }
 
     public id: string;
-    public song: Song;
+    public songId: string;
     public createdByUser: Song;
     public revision: number;
     public createdDateUtc: Date;

@@ -32,6 +32,18 @@ input.text-bg-light::placeholder {
   margin-top: var(--navbar-height);
   height: var(--inner-content-height);
 }
+.sidebar-offcanvas{
+    width: 280px;
+    height: 100%;
+}
+
+.channel-sidebar-link:hover {
+    background-color: #616161;
+
+}
+.channel-sidebar-link:active {
+    background-color: #616161;
+}
 
 @media (min-width: 992px) {
   #main-navbar{
@@ -44,6 +56,13 @@ input.text-bg-light::placeholder {
     position: fixed;
     top: 0;
   }
+  .sidebar-offcanvas{
+    height: 100vh;
+    }
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 

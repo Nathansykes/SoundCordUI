@@ -1,16 +1,50 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import Sidebar from './components/layout/Sidebar.vue';
 import Navbar from './components/layout/Navbar.vue';
 import store from './store';
 import ApplicationUser from './application-user';
+import ApiAccountService from './api/services/account-service';
+import router from './router';
+
+
+const currentUser = ref(ApplicationUser.getCurrentUser());
 
 onMounted(() => {
     window.addEventListener('resize', onLoadOrResizse);
     document.addEventListener('DOMContentLoaded', onLoadOrResizse); 
     window.addEventListener('load', onLoadOrResizse);
     onLoadOrResizse();
+    checkLogin();
+
+    window.addEventListener('userstorage', () => {
+        currentUser.value = ApplicationUser.getCurrentUser();
+    });
+    setInterval(checkLogin, 1000 * 60); // 1 minute
 });
+
+function checkLogin() {
+    if(window.location.href.includes("account/login") || window.location.href.includes("account/register")){
+        return;
+    }
+
+    ApiAccountService.GetUserDetails().then(() => {
+        currentUser.value = ApplicationUser.getCurrentUser();
+    }).catch(() => {
+        ApiAccountService.Refresh().then(() => {
+            currentUser.value = ApplicationUser.getCurrentUser();
+        }).catch(() => {
+            logOut()
+        });
+    });
+}
+
+function logOut() {
+    currentUser.value = null;
+    ApplicationUser.logOut();
+    window.location.href = router.resolve({name: 'Login'}).href;
+}
+
 
 function onLoadOrResizse() {
     store.isMobile = window.innerWidth < 992;
@@ -31,7 +65,7 @@ function onLoadOrResizse() {
 
 <template>
 
-    <div v-if="ApplicationUser.isLoggedIn()">
+    <div v-if="currentUser != null">
         <Sidebar />
         <div id="main-content" style="">
             <Navbar />
