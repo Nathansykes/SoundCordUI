@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import router from '@/router';
-import store, { ApplicationUser } from '../../store';
+import store from '../../store';
+import ApplicationUser from '@/application-user';
 import { ref, onMounted } from 'vue';
 
 const currentUser = ref(ApplicationUser.getCurrentUser());
+
+
 
 function logOut() {
   ApplicationUser.logOut();

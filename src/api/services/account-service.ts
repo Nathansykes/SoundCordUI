@@ -1,5 +1,6 @@
 import axios from "axios";
-import store, { ApplicationUser } from "../store";
+import store from "../../store";
+import ApplicationUser from '@/application-user';
 
 axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers["Access-Control-Allow-Methods"] =

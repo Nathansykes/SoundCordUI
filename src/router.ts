@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import store, { ApplicationUser } from './store';
+import store from './store';
+import { ApplicationUser } from './application-user';
 import routes from './routes';
 
 const router = createRouter({

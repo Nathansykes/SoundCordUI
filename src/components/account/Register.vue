@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import ApiAccountService from "../../services/api-account-service";
+import ApiAccountService from "../../api/services/account-service";
 import { ref, onMounted, defineProps } from "vue";
 
 

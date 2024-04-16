@@ -2,7 +2,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import Sidebar from './components/layout/Sidebar.vue';
 import Navbar from './components/layout/Navbar.vue';
-import store, { ApplicationUser } from './store';
+import store from './store';
+import ApplicationUser from './application-user';
 
 onMounted(() => {
   window.addEventListener('resize', onLoadOrResizse);
