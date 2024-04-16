@@ -7,41 +7,41 @@ axios.defaults.headers["Access-Control-Allow-Methods"] =
   "GET,PUT,POST,DELETE,PATCH,OPTIONS";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    Authorization: "Bearer " + ApplicationUser.getToken()?.accessToken,
-  },
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+    headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: "Bearer " + ApplicationUser.getToken()?.accessToken,
+    },
 });
 
 export class ApiService {
-  private static async trySendRequest<T>(
-    url: string,
-    method: string,
-    data: any
-  ): Promise<T> {
-    for (let i = 0; i < 2; i++) {
-      try {
-        const response = await apiClient.request<T>({
-          url: url,
-          method: method,
-          data: data,
-        });
-        return response.data;
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response?.status === 401) {
-          const token = await ApiAccountService.Refresh();
-          if (token != null) {
-            apiClient.defaults.headers["Authorization"] =
+    private static async trySendRequest<T>(
+        url: string,
+        method: string,
+        data: any
+    ): Promise<T> {
+        for (let i = 0; i < 2; i++) {
+            try {
+                const response = await apiClient.request<T>({
+                    url: url,
+                    method: method,
+                    data: data,
+                });
+                return response.data;
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                if (axiosError.response?.status === 401) {
+                    const token = await ApiAccountService.Refresh();
+                    if (token != null) {
+                        apiClient.defaults.headers["Authorization"] =
               "Bearer " + token.accessToken;
-            continue;
-          }
+                        continue;
+                    }
+                }
+                throw error;
+            }
         }
-        throw error;
-      }
+        throw new Error("Failed to refresh token");
     }
-    throw new Error("Failed to refresh token");
-  }
 }
