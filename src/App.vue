@@ -24,7 +24,7 @@ onMounted(() => {
 });
 
 function checkLogin() {
-    if(window.location.href.includes("account/login") || window.location.href.includes("account/register")){
+    if(window.location.href.includes("/account/")) {
         return;
     }
 

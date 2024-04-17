@@ -42,17 +42,7 @@ export class UserInfoModel{
     }
 }
 
-export class LoginResult {
-    public success: boolean;
-    public errors: string[];
-
-    constructor(success: boolean, errors: string[]) {
-        this.success = success;
-        this.errors = errors;
-    }
-}
-
-export class RegisterResult {
+export class AccountActionResult {
     public success: boolean;
     public errors: string[];
 
@@ -75,10 +65,42 @@ export class ApiAccountService {
 
     private async RegisterPrivate(
         username: string,
+        email: string,
         password: string
     ): Promise<void> {
         const url = "/account/register";
-        await apiAccountClient.post(url, { username, password });
+        await apiAccountClient.post(url, { username, email, password });
+    }
+
+    private Failure(e: any): AccountActionResult {
+        const errors: string[] = [];
+        if(e.response.data && e.response.data.errors){
+            Object.keys(e.response.data.errors).forEach((key) => {
+                if (key != "$")
+                    errors.push((e.response.data.errors as any)[key].join("\n"));
+            });
+        }
+        return new AccountActionResult(false, errors);
+    }
+
+    public async ForgotPassword(username: string): Promise<AccountActionResult> {
+        try {
+            const url = "/account/forgotpassword";
+            await apiAccountClient.post(url, { username });
+            return new AccountActionResult(true, []);
+        } catch(e : any){
+            return this.Failure(e);
+        }
+    }
+
+    public async ResetPassword(username: string, token: string, newPassword: string): Promise<AccountActionResult> {
+        try {
+            const url = "/account/resetpassword";
+            await apiAccountClient.post(url, { username, token, newPassword });
+            return new AccountActionResult(true, []);
+        } catch(e : any){
+            return this.Failure(e);
+        }
     }
 
     public async GetUserDetails(): Promise<UserInfoModel> {
@@ -109,40 +131,25 @@ export class ApiAccountService {
         return newToken;
     }
 
-    public async Login(username: string, password: string): Promise<LoginResult> {
+    public async Login(username: string, password: string): Promise<AccountActionResult> {
         try {
             const token = await this.LoginPrivate(username, password);
             ApplicationUser.setToken(token);
             await this.GetUserDetails();
-            return new LoginResult(true, []);
+            return new AccountActionResult(true, []);
         } catch (e: any) {
-            console.log(e);
-            const errors: string[] = [];
-            if(e.response.data && e.response.data.errors){
-                Object.keys(e.response.data.errors).forEach((key) => {
-                    if (key != "$")
-                        errors.push((e.response.data.errors as any)[key].join("\n"));
-                });
-            }
-            return new LoginResult(false, errors);
+            return this.Failure(e);
         }
     }
 
-    public async Register( username: string, password: string): Promise<RegisterResult> {
+    public async Register( username: string, email: string, password: string): Promise<AccountActionResult> {
         try {
-            await this.RegisterPrivate(username, password);
-            return new RegisterResult(true, []);
+            await this.RegisterPrivate(username, email, password);
+            return new AccountActionResult(true, []);
         } catch (e: any) {
-            console.log(e);
-            const errors: string[] = [];
-            Object.keys(e.response.data.errors).forEach((key) => {
-                if (key != "$")
-                    errors.push((e.response.data.errors as any)[key].join("\n"));
-            });
-            return new RegisterResult(false, errors);
+            return this.Failure(e);
         }
     }
-
 }
 
 export default new ApiAccountService();

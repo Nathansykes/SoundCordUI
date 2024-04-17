@@ -2,16 +2,18 @@
 import router from "@/router";
 import ApiAccountService from "../../api/services/account-service";
 import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
 
-var username: string;
-var email: string;
+const username =  useRoute().query.username?.valueOf() as string;
+const token =  (useRoute().query.token?.valueOf() as string);
+
 var password: string;
 var confirmpassword: string;
 
 var errors = ref([] as string[]);
 
-async function registerSubmit(formSubmitEvent: Event) {
+async function resetSubmit(formSubmitEvent: Event) {
     const form = formSubmitEvent.target as HTMLFormElement;
     formSubmitEvent.preventDefault();
     //check form is valid 
@@ -20,9 +22,9 @@ async function registerSubmit(formSubmitEvent: Event) {
         formSubmitEvent.stopPropagation();
         return;
     }
-    const result = await ApiAccountService.Register(username, email, password);
+    const result = await ApiAccountService.ResetPassword(username, token, password);
     if(result.success){
-        router.push({name: 'Login', query: { state: 'fromRegister'} });
+        router.push({name: 'Login', query: { state: 'reset'} });
     } else {
         errors.value = result.errors;
     }
@@ -48,7 +50,7 @@ function validateForm(form: HTMLFormElement) : boolean {
 }
 
 onMounted(() => {
-    const form = document.getElementById('registerForm') as HTMLFormElement;
+    const form = document.getElementById('resetForm') as HTMLFormElement;
     const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
         input.addEventListener('change', () => {
@@ -79,22 +81,11 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image" />
                     </div>
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 ">
-                        <form id="registerForm" class="needs-validation" @submit="registerSubmit" novalidate >
-                            <h1>Register</h1>
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="username" title="Username" ></label>
-                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a unique username" autocomplete="true" required  />
-                            </div>
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="email" title="Email address" ></label>
-                                <input v-model="email" type="email" name="email" id="email" class="form-control form-control-lg text-bg-light" placeholder="Enter a valid email address" autocomplete="true" required  />
-                                <div class="invalid-feedback">
-                                    Please enter a valid email address
-                                </div>
-                            </div>
+                        <form id="resetForm" class="needs-validation" @submit="resetSubmit" novalidate >
+                            <h1>Reset Password</h1>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="password" title="Password"></label>
-                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$"  placeholder="Enter password" autocomplete="true" required />
+                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$"  placeholder="Enter new password" autocomplete="true" required />
                                 <div class="invalid-feedback">
                                     Please enter a valid password, must contain:<br />
                                     <ul>
@@ -119,11 +110,9 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                                 </ul>
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <i>By registering you confirm you have read the <a href="#">Participant Information Sheet</a></i><br>
-                                <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Register</button>
+                                <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Reset</button>
                                 <p class="small mt-2 pt-1 mb-0">
-                                    Already have an account?
-                                    <router-link to="/account/login">Login</router-link>
+                                    <router-link to="/account/login">Back to Login</router-link>
                                 </p>
                             </div>
                         </form>
