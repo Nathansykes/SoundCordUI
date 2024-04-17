@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import apiGroupService from "@/api/services/api-group-service";
+import apiGroupService from "@/api/services/group-service";
 import { ref, onMounted } from "vue";
 import type { Group } from "@/api/models";
 import ApplicationUser from "@/application-user";

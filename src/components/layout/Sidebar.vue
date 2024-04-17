@@ -4,9 +4,9 @@ import store from '../../store';
 import ApplicationUser from '@/application-user';
 import { ref, onMounted } from 'vue';
 import { Group, Song, Channel } from '@/api/models';
-import apiGroupService from '@/api/services/api-group-service';
-import apiChannelService from '@/api/services/api-channel-service';
-import apiSongService from '@/api/services/api-song-service';
+import apiGroupService from '@/api/services/group-service';
+import apiChannelService from '@/api/services/channel-service';
+import apiSongService from '@/api/services/song-service';
 
 const currentUser = ref(ApplicationUser.getCurrentUser());
 const currentGroup = ref(ApplicationUser.getCurrentGroup());

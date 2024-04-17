@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, defineProps } from 'vue';
 import SessionStorageService from '@/services/session-storage-service';
-import apiChannelService from '@/api/services/api-channel-service';
+import apiChannelService from '@/api/services/channel-service';
 
 import type { Channel } from '@/api/models';
 import router from '@/router';
