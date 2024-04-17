@@ -7,12 +7,16 @@ import { Group, Song, Channel } from '@/api/models';
 import apiGroupService from '@/api/services/group-service';
 import apiChannelService from '@/api/services/channel-service';
 import apiSongService from '@/api/services/song-service';
+import AddUserToGroup from '../groups/AddUserToGroup.vue';
+import AlertService from '@/services/alert-service';
 
 const currentUser = ref(ApplicationUser.getCurrentUser());
 const currentGroup = ref(ApplicationUser.getCurrentGroup());
 const groups = ref([] as Group[]);
 const channels = ref([] as Channel[]);
 const songs = ref([] as Song[]);
+
+const addUser = ref(false);
 
 const creatingChannel = ref(false);
 const creatingSong = ref(false);
@@ -100,11 +104,13 @@ function closeCreateSong() {
     
 }
 
-// function switchGroup(event: Event) {
-//     event.preventDefault();
-//     ApplicationUser.removeCurrentGroup();
-//     window.location.href = router.resolve({name: 'Choose Group'}).href;
-// }
+function closeUser(success: boolean){
+    addUser.value = false;
+    if (success){
+        AlertService.showAlert('User added to group', 'success');
+    }
+}
+
 </script>
 
 <template>
@@ -112,7 +118,7 @@ function closeCreateSong() {
         <div :class="(store.isMobile ? 'offcanvas' : '')  +' offcanvas-start offcanvas-body d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar-offcanvas'" tabindex="-1" id="main-sidebar-offcanvas" aria-labelledby="main-sidebar-offcanvasLabel">
             <div class="align-items-center text-white text-decoration-none">
                 <span class="fs-4" style="margin-top:4px">
-                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span>
+                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span> <button @click="addUser = true" class="btn btn-sm"><i class="bi bi-person-plus fs-5"></i></button>
                     <button class="btn btn-sm d-lg-none float-end padding-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-sidebar-offcanvas" aria-controls="main-sidebar-offcanvas" role="button" title="Toggle Sidebar">
                         <i class="bi bi-x-lg fs-5 "></i>
                     </button>
@@ -166,4 +172,5 @@ function closeCreateSong() {
             </div>
         </div>
     </div>
+    <AddUserToGroup v-if="addUser" @close="closeUser" />
 </template>
