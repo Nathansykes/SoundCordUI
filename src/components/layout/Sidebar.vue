@@ -33,8 +33,13 @@ onMounted(() => {
 
     apiGroupService.getGroups().then((response) => {
         groups.value = response;
-        if((!currentGroup.value) || !groups.value.find(g => g.id === currentGroup.value?.id)) {
+        if ((!currentGroup.value) || !groups.value.find(g => g.id === currentGroup.value?.id)) {
             currentGroup.value = groups.value[0];
+            if (!currentGroup.value) {
+                ApplicationUser.removeCurrentGroup();
+                router.push({name: 'Choose Group'});
+                return;
+            }
             ApplicationUser.setCurrentGroup(currentGroup.value);
         }
     }).then(() => {
@@ -93,6 +98,12 @@ function closeCreateSong() {
     creatingSong.value = false;
     songName= null;
 }
+
+// function switchGroup(event: Event) {
+//     event.preventDefault();
+//     ApplicationUser.removeCurrentGroup();
+//     window.location.href = router.resolve({name: 'Choose Group'}).href;
+// }
 </script>
 
 <template>
@@ -120,7 +131,7 @@ function closeCreateSong() {
                     </div>
                 </form>
                 <li class="nav-item" v-for="channel in channels" :key="channel.id" >
-                    <router-link :to="`/channel/${channel.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ channel.channelName }}</router-link>  
+                    <router-link :to="`/channels/${channel.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ channel.channelName }}</router-link>  
                 </li>
                 <hr />
                 <i>Songs <button class="btn btn-sm btn-secondary float-end" title="Open Create Song" @click="toggleCreateSong"><i :class="`bi bi-${creatingSong ? 'x' : 'plus'}-lg`" ></i></button></i>
@@ -146,13 +157,12 @@ function closeCreateSong() {
                     <strong>{{ currentUser?.userName }}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
-                    <li><a class="dropdown-item" href="#">Switch Group</a></li>
-                    <li><router-link to="/settings" class="dropdown-item" aria-current="page">Settings</router-link></li>
+                    <li><router-link to="/choosegroup" class="dropdown-item">Switch Group</router-link></li>
+                    <li><router-link to="/settings" class="dropdown-item">Settings</router-link></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a @click="logOut" href="#" class="dropdown-item" aria-current="page">Log Out</a></li>
+                    <li><a @click="logOut" href="#" class="dropdown-item">Log Out</a></li>
                 </ul>
             </div>
         </div>
-      
     </div>
 </template>

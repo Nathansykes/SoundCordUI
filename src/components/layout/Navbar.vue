@@ -1,4 +1,16 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import SessionStorageService from '@/services/session-storage-service';
+import type { Channel } from '@/api/models';
+
+const currentChannel = ref(SessionStorageService.getJsonSessionStorageItem<Channel>('currentChannel'));
+
+onMounted(() => {
+    window.addEventListener('sessionstorage', () => {
+        currentChannel.value = SessionStorageService.getJsonSessionStorageItem<Channel>('currentChannel');
+    });
+});
+
 
 </script>
 
@@ -11,7 +23,7 @@
                         <i class="bi bi-list fs-5"></i>
                     </button>
                 </div>
-                <span class="navbar-brand" >Select a channel...</span>
+                <span class="navbar-brand" >{{ currentChannel?.channelName }}</span>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <div class="d-flex" role="search">

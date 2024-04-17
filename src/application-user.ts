@@ -32,6 +32,11 @@ export default class ApplicationUser {
         localStorage.setItem(key, encodedString);
     }
 
+    private static removeLocalStorageItem(key: string): void {
+        localStorage.removeItem(key);
+        window.dispatchEvent(new CustomEvent('userstorage', { detail: { key } }));
+    }
+
     public static isLoggedIn(): boolean {
         return ApplicationUser.getCurrentUser() != null;
     }
@@ -64,6 +69,10 @@ export default class ApplicationUser {
 
     public static setCurrentGroup(group: Group): void {
         ApplicationUser.setJsonLocalStorageItem('currentGroup', group);
+    }
+
+    public static removeCurrentGroup(): void {
+        ApplicationUser.removeLocalStorageItem('currentGroup');
     }
 
 

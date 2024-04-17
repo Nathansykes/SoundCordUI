@@ -8,8 +8,8 @@ class ApiGroupService {
     public async getGroup(id: string) : Promise<Group>  {
         return await ApiService.get<Group>(`/groups/${id}`);
     }
-    public async createGroup(group: Group) : Promise<Group> {
-        return await ApiService.post<Group>("/groups", group);
+    public async createGroup(groupName: string) : Promise<Group> {
+        return await ApiService.post<Group>("/groups", { groupName });
     }
     public async addUserToGroup(groupId: string, userName: string) {
         await ApiService.post<Group>(`/groups/${groupId}/users/${userName}`);

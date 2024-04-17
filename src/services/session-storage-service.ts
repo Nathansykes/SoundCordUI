@@ -16,15 +16,15 @@ export default class SessionStorageService {
     }
 
     public static setJsonSessionStorageItem<T>(key: string, value: T): void {
-        window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { key, value } }));
         const jsonString = JSON.stringify(value);
         const encodedString = btoa(jsonString);
         sessionStorage.setItem(key, encodedString);
+        window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { key, value } }));
     }
 
     public static setSessionStorageItem(key: string, value: string): void {
-        window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { key, value } }));
         sessionStorage.setItem(key , value);
+        window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { key, value } }));
     }
 
     public static getSessionStorageItem(key: string): string | null {

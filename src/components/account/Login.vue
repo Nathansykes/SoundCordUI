@@ -4,12 +4,13 @@ import ApiAccountService from "../../api/services/account-service";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
-const fromRegister =  useRoute().query.fromRegister === 'true';
+const state =  useRoute().query.state;
 
 var username: string;
 var password: string;
 
 var errors = ref([] as string[]);
+var loading = ref(false);
 
 async function loginSubmit(formSubmitEvent: Event) {
     const form = formSubmitEvent.target as HTMLFormElement;
@@ -19,12 +20,14 @@ async function loginSubmit(formSubmitEvent: Event) {
         formSubmitEvent.stopPropagation();
         return;
     }
+    loading.value=true;
     const result = await ApiAccountService.Login(username, password);
     if (result.success){
         window.location.href = router.resolve({name: 'Home'}).href;
     } else {
         errors.value = result.errors;
     }
+    loading.value=false;
 }
 
 function validateForm(form: HTMLFormElement) : boolean {
@@ -50,13 +53,12 @@ onMounted(() => {
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 ">
                         <form class="needs-validation" @submit="loginSubmit" novalidate >
                             <h1>Login</h1>
-                            <p class="text-success" v-if="fromRegister">Registration successful, please login</p>
+                            <p class="text-success" v-if="state=='fromRegister'">Registration successful, please login</p>
+                            <p class="text-success" v-else-if="state=='expired'">Session expired, please login again</p>
+                            <p class="text-success" v-else-if="state=='reset'">Password reset sucessful, please login again</p>
                             <div class="form-outline mb-4">
-                                <label class="form-label" for="email" title="Email address" ></label>
-                                <input v-model="username" type="email" name="email" id="email" class="form-control form-control-lg text-bg-light" placeholder="Enter a valid email address" autocomplete="true" required  />
-                                <div class="invalid-feedback">
-                                    Please enter a valid email address
-                                </div>
+                                <label class="form-label" for="username" title="Username" ></label>
+                                <input v-model="username" type="username" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a username" autocomplete="true" required  />
                             </div>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="password" title="Password"></label>
@@ -71,10 +73,13 @@ onMounted(() => {
                                 </ul>
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Login</button>
+                                <button :disabled="loading === true" type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Login <span v-if="loading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
                                 <p class="small mt-2 pt-1 mb-0">
                                     Don't have an account?
-                                    <router-link to="/account/register">Register</router-link>
+                                    <router-link to="/account/register">Register </router-link>
+                                </p>
+                                <p class="small mt-2 pt-1 mb-0">
+                                    <router-link to="/account/forgotpassword">Reset Password</router-link>
                                 </p>
                             </div>
                         </form>
@@ -86,19 +91,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.divider:after,
-.divider:before {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #eee;
-}
-.h-custom {
-  height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-  .h-custom {
-    height: 100%;
-  }
-}
 </style>

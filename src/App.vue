@@ -6,9 +6,13 @@ import store from './store';
 import ApplicationUser from './application-user';
 import ApiAccountService from './api/services/account-service';
 import router from './router';
+import Modal from 'bootstrap/js/dist/modal';
 
 
 const currentUser = ref(ApplicationUser.getCurrentUser());
+const currentGroup = ref(ApplicationUser.getCurrentGroup());
+const isChoosingGroup = ref(false);
+const modalEnabled = ref(false);
 
 onMounted(() => {
     window.addEventListener('resize', onLoadOrResizse);
@@ -17,14 +21,30 @@ onMounted(() => {
     onLoadOrResizse();
     checkLogin();
 
+    if (currentGroup.value == null){
+        if (router.currentRoute.value.name !== 'Choose Group') {
+            router.push({name: 'Choose Group'});
+        }
+    }
+
     window.addEventListener('userstorage', () => {
         currentUser.value = ApplicationUser.getCurrentUser();
+        currentGroup.value = ApplicationUser.getCurrentGroup();
     });
     setInterval(checkLogin, 1000 * 60); // 1 minute
+
+    window.addEventListener('choosegroup', () => {
+        isChoosingGroup.value = router.currentRoute.value.name === 'Choose Group'
+        modalEnabled.value = true;
+        var md = document.getElementById('exampleModal');
+        const m = Modal.getOrCreateInstance(md!)
+        m?.show();
+        
+    });
 });
 
 function checkLogin() {
-    if(window.location.href.includes("account/login") || window.location.href.includes("account/register")){
+    if(window.location.href.includes("/account/")) {
         return;
     }
 
@@ -43,6 +63,14 @@ function logOut() {
     currentUser.value = null;
     ApplicationUser.logOut();
     window.location.href = router.resolve({name: 'Login'}).href;
+}
+
+function groupClose(){
+    modalEnabled.value = false;
+    var md = document.getElementById('exampleModal');
+    const m = Modal.getOrCreateInstance(md!)
+    m?.hide();
+    router.back();
 }
 
 
@@ -66,16 +94,44 @@ function onLoadOrResizse() {
 <template>
 
     <div v-if="currentUser != null">
-        <Sidebar />
-        <div id="main-content" style="">
-            <Navbar />
-            <div id="main-inner-content">
-                <router-view />
+        <div v-if="currentGroup != null">
+            <div v-if="isChoosingGroup">
+                <Sidebar />
+                <div id="main-content" style="">
+                    <Navbar />
+                    <div id="main-inner-content">
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <Sidebar />
+                <div id="main-content" style="">
+                    <Navbar />
+                    <div id="main-inner-content">
+                        <router-view :key="$route.fullPath" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div v-else>
-        <router-view />
+        <router-view :key="$route.fullPath"  />
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Choose a group</h5>
+                    <button v-if="currentGroup != null" @click="groupClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div v-if="modalEnabled">
+                        <router-view  :key="$route.fullPath" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
