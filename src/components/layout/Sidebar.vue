@@ -12,19 +12,10 @@ import AlertService from '@/services/alert-service';
 
 const currentUser = ref(ApplicationUser.getCurrentUser());
 const currentGroup = ref(ApplicationUser.getCurrentGroup());
+
 const groups = ref([] as Group[]);
 const channels = ref([] as Channel[]);
 const songs = ref([] as Song[]);
-
-const addingUser = ref(false);
-const errors = ref([] as string[]);
-var username: string;
-
-const creatingChannel = ref(false);
-const creatingSong = ref(false);
-
-var channelName : string | null;
-var songName : string | null;
 
 
 function logOut() {
@@ -62,6 +53,9 @@ onMounted(() => {
     })
 });
 
+// CHANNELS
+const creatingChannel = ref(false);
+var channelName : string | null;
 function sortChannels() {
     channels.value = channels.value.sort((a, b) => {
         return a.channelName.localeCompare(b.channelName);
@@ -82,6 +76,10 @@ function toggleCreateChannel() {
 function closeCreateChannel() {
     creatingChannel.value = false;
 }
+
+//SONGS
+const creatingSong = ref(false);
+var songName : string | null;
 
 function sortSongs() {
     songs.value = songs.value.sort((a, b) => {
@@ -106,17 +104,23 @@ function closeCreateSong() {
     
 }
 
+
+//USER GROUPS
+const addingUser = ref(false);
+const errors = ref([] as string[]);
+var username: string;
+
 function closeUser(success: boolean){
     addingUser.value = false;
     if (success){
         AlertService.showAlert('User added to group', 'success');
     }
-    document.getElementById('userModalDismiss')?.click()
+    document.getElementById('optionsModalDismiss')?.click()
 }
 
 function openUser () {
     addingUser.value = true;
-    document.getElementById('openUserModalButton')?.click();
+    document.getElementById('openOptionsModalButton')?.click();
 }
 
 function validateForm(form: HTMLFormElement) : boolean {
@@ -149,6 +153,28 @@ async function addUser(event : Event){
             errors.value = ['An error occurred, please try again later'];
         }
     }
+}
+
+
+//LEAVE GROUP
+
+const leavingGroup = ref(false);
+
+function openLeaveGroup() {
+    leavingGroup.value = true;
+    document.getElementById('openOptionsModalButton')?.click();
+}
+
+function closeLeaveGroup() {
+    leavingGroup.value = false;
+    document.getElementById('optionsModalDismiss')?.click();
+}
+
+async function leaveGroupConfirm() {
+    await apiGroupService.leaveGroup(currentGroup.value!.id);
+    ApplicationUser.removeCurrentGroup();
+    window.location.href = router.resolve({name: 'Choose Group'}).href;
+    closeLeaveGroup();
 }
 
 </script>
@@ -199,15 +225,14 @@ async function addUser(event : Event){
           
             <hr>
           
-            <button id="openUserModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                Launch demo modal
-            </button>
+            <button id="openOptionsModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#optionsModal"></button>
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <strong>{{ currentUser?.userName }}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
                     <li><router-link to="/choosegroup" class="dropdown-item">Switch Group</router-link></li>
+                    <li><a @click="openLeaveGroup" href="#" class="dropdown-item">Leave Group</a></li>
                     <li><router-link to="/settings" class="dropdown-item">Settings</router-link></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a @click="logOut" href="#" class="dropdown-item">Log Out</a></li>
@@ -217,12 +242,12 @@ async function addUser(event : Event){
     </div>
 
     
-    <div  class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" >
+    <div  class="modal fade" id="optionsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" >
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Add User to Group</h5>
-                    <button @click="closeUser(false)" type="button" class="btn-close" data-bs-dismiss="modal" id="userModalDismiss" aria-label="Close"></button>
+                    <h5 class="modal-title" id="optionsModalLabel">{{ addingUser ? 'Add User to Group' : 'Leave Group'  }}</h5>
+                    <button @click="closeUser(false);closeLeaveGroup();" type="button" class="btn-close" data-bs-dismiss="modal" id="optionsModalDismiss" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <section v-if="addingUser === true" class="">
@@ -250,6 +275,25 @@ async function addUser(event : Event){
                                             <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Confirm</button>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section v-if="leavingGroup === true" class="">
+                        <div class="container-fluid h-custom">
+                            <div class="row d-flex justify-content-center align-items-center h-100">
+                                <div class="col-md-12 justify-content-center align-items-center ">
+                                    <div class="text-center text-lg mt-4 pt-2">
+                                        <div v-if="currentGroup?.createdByUser == currentUser?.userName">
+                                            <h4>Unable to leave this group because it was created by you</h4>
+                                            <br />
+                                        </div>
+                                        <div v-else>
+                                            <h3>Are you sure you want to leave the group: {{ currentGroup?.groupName }}</h3>
+                                            <br />
+                                            <button @click="leaveGroupConfirm" type="submit" class="btn btn-danger btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Leave</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

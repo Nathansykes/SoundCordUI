@@ -14,6 +14,9 @@ class ApiGroupService {
     public async addUserToGroup(groupId: string, userName: string) {
         await ApiService.post<Group>(`/groups/${groupId}/users/${userName}`);
     }
+    public async leaveGroup(groupId: string) {
+        await ApiService.post<Group>(`/groups/${groupId}/leave`);
+    }
 }
 
 export default new ApiGroupService();
