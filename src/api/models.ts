@@ -18,6 +18,7 @@ export class Group {
     public id: string;
     public groupName: string;
     public users: string[] = [];
+    public createdByUser: string | null = null;
 }
 
 export class Channel {
