@@ -44,7 +44,7 @@ async function createGroupSubmit(formSubmitEvent: Event) {
         return;
     }
 
-    var group = await apiGroupService.createGroup(newGroupName);
+    await apiGroupService.createGroup(newGroupName);
     closeGroup();
     populateGroups();
 }
