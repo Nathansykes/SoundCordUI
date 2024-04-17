@@ -66,6 +66,7 @@ function logOut() {
 }
 
 function groupClose(){
+    isChoosingGroup.value = false;
     modalEnabled.value = false;
     var md = document.getElementById('exampleModal');
     const m = Modal.getOrCreateInstance(md!)

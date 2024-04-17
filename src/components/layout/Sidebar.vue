@@ -97,6 +97,7 @@ function toggleCreateSong() {
 function closeCreateSong() {
     creatingSong.value = false;
     songName= null;
+    
 }
 
 // function switchGroup(event: Event) {
@@ -111,7 +112,7 @@ function closeCreateSong() {
         <div :class="(store.isMobile ? 'offcanvas' : '')  +' offcanvas-start offcanvas-body d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar-offcanvas'" tabindex="-1" id="main-sidebar-offcanvas" aria-labelledby="main-sidebar-offcanvasLabel">
             <div class="align-items-center text-white text-decoration-none">
                 <span class="fs-4" style="margin-top:4px">
-                    {{ currentGroup?.groupName }}
+                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span>
                     <button class="btn btn-sm d-lg-none float-end padding-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-sidebar-offcanvas" aria-controls="main-sidebar-offcanvas" role="button" title="Toggle Sidebar">
                         <i class="bi bi-x-lg fs-5 "></i>
                     </button>

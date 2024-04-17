@@ -9,7 +9,7 @@ const router = createRouter({
     linkExactActiveClass: ''
 });
 
-router.afterEach(async (to, _from) => {
+router.afterEach(async (to) => {
     if(to.name === 'Choose Group'){
         window.dispatchEvent(new CustomEvent('choosegroup'));
     }
