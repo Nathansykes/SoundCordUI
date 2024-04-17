@@ -81,6 +81,9 @@ onMounted(() => {
                                 <p class="small mt-2 pt-1 mb-0">
                                     <router-link to="/account/forgotpassword">Reset Password</router-link>
                                 </p>
+                                <p class="small mt-2 pt-1 mb-0">
+                                    <router-link to="/account/forgotpassword">Reset Password</router-link>
+                                </p>
                             </div>
                         </form>
                     </div>

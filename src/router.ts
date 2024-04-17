@@ -16,7 +16,6 @@ router.afterEach(async (to, _from) => {
 })
 
 router.beforeEach(async (to, _from, next) => {
-    
     if ((!anonymousRoutes.some(r => r.name === to.name)) && !ApplicationUser.isLoggedIn()) {
         next({ name: 'Login' });
         return;
