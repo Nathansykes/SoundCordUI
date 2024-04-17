@@ -58,7 +58,7 @@ onMounted(() => {
                             <p class="text-success" v-else-if="state=='reset'">Password reset sucessful, please login again</p>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username" title="Username" ></label>
-                                <input v-model="username" type="username" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a username" autocomplete="true" required  />
+                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a username" autocomplete="true" required  />
                             </div>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="password" title="Password"></label>

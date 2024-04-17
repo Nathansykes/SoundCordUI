@@ -89,6 +89,15 @@ input.text-bg-light::placeholder {
       background-position: 468px 0
   }
 }
+
+#alertContainer {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 300px;
+    z-index: 9999;
+}
+
 .placeholder{
     animation-duration: 1.25s;
     animation-fill-mode: forwards;

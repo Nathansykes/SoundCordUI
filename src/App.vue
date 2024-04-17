@@ -119,7 +119,7 @@ function onLoadOrResizse() {
         <router-view :key="$route.fullPath"  />
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" >
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -134,20 +134,7 @@ function onLoadOrResizse() {
             </div>
         </div>
     </div>
-    <div id="alertContainer">
-      
-    </div>
     
 
 </template>
 
-<style scoped>
-#alertContainer {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    width: 300px;
-    z-index: 9999;
-}
-
-</style>

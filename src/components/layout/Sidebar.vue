@@ -7,8 +7,8 @@ import { Group, Song, Channel } from '@/api/models';
 import apiGroupService from '@/api/services/group-service';
 import apiChannelService from '@/api/services/channel-service';
 import apiSongService from '@/api/services/song-service';
-import AddUserToGroup from '../groups/AddUserToGroup.vue';
 import AlertService from '@/services/alert-service';
+
 
 const currentUser = ref(ApplicationUser.getCurrentUser());
 const currentGroup = ref(ApplicationUser.getCurrentGroup());
@@ -16,7 +16,9 @@ const groups = ref([] as Group[]);
 const channels = ref([] as Channel[]);
 const songs = ref([] as Song[]);
 
-const addUser = ref(false);
+const addingUser = ref(false);
+const errors = ref([] as string[]);
+var username: string;
 
 const creatingChannel = ref(false);
 const creatingSong = ref(false);
@@ -105,9 +107,47 @@ function closeCreateSong() {
 }
 
 function closeUser(success: boolean){
-    addUser.value = false;
+    addingUser.value = false;
     if (success){
         AlertService.showAlert('User added to group', 'success');
+    }
+    document.getElementById('userModalDismiss')?.click()
+}
+
+function openUser () {
+    addingUser.value = true;
+    document.getElementById('openUserModalButton')?.click();
+}
+
+function validateForm(form: HTMLFormElement) : boolean {
+    let htmlValid = form.checkValidity();
+    form.classList.add('was-validated');
+    return htmlValid;
+}
+
+async function addUser(event : Event){
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    if (!validateForm(form)){
+        event.stopPropagation();
+        return;
+    }
+    try {
+        const currentGroup = ApplicationUser.getCurrentGroup();
+        await apiGroupService.addUserToGroup(currentGroup!.id, username);
+        closeUser(true);
+    } catch (error: any) {
+        if(error.response?.status === 400) {
+            if ((error.response?.data as any).errors) {
+                errors.value = (error.response?.data as any).errors;
+            } else {
+                errors.value = [(error.response?.data as any).detail];
+            }
+        } else if (error.response?.status === 404) {
+            errors.value = [(error.response?.data as any).detail];
+        } else{
+            errors.value = ['An error occurred, please try again later'];
+        }
     }
 }
 
@@ -118,7 +158,7 @@ function closeUser(success: boolean){
         <div :class="(store.isMobile ? 'offcanvas' : '')  +' offcanvas-start offcanvas-body d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar-offcanvas'" tabindex="-1" id="main-sidebar-offcanvas" aria-labelledby="main-sidebar-offcanvasLabel">
             <div class="align-items-center text-white text-decoration-none">
                 <span class="fs-4" style="margin-top:4px">
-                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span> <button @click="addUser = true" class="btn btn-sm"><i class="bi bi-person-plus fs-5"></i></button>
+                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span> <button type="button" @click="openUser" class="btn btn-sm"><i class="bi bi-person-plus fs-5"></i></button>
                     <button class="btn btn-sm d-lg-none float-end padding-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-sidebar-offcanvas" aria-controls="main-sidebar-offcanvas" role="button" title="Toggle Sidebar">
                         <i class="bi bi-x-lg fs-5 "></i>
                     </button>
@@ -159,6 +199,9 @@ function closeUser(success: boolean){
           
             <hr>
           
+            <button id="openUserModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                Launch demo modal
+            </button>
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <strong>{{ currentUser?.userName }}</strong>
@@ -172,5 +215,49 @@ function closeUser(success: boolean){
             </div>
         </div>
     </div>
-    <AddUserToGroup v-if="addUser" @close="closeUser" />
+
+    
+    <div  class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add User to Group</h5>
+                    <button @click="closeUser(false)" type="button" class="btn-close" data-bs-dismiss="modal" id="userModalDismiss" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <section v-if="addingUser === true" class="">
+                        <div class="container-fluid h-custom">
+                            <div class="row d-flex justify-content-center align-items-center h-100">
+                                <div class="col-md-12 justify-content-center align-items-center ">
+                                    <form class="needs-validation text-center" @submit="addUser" novalidate >
+                                        <div class="form-outline mb-4">
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="username" title="Username" ></label>
+                                                <input v-model="username" type="username" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a username" autocomplete="true" required  />
+                                                <div class="invalid-feedback">
+                                                    Please enter a username
+                                                </div>  
+                                            </div>
+                                        </div>
+                                        <div v-if="errors.length > 0">
+                                            <div class=" align-content-start text-danger">
+                                                <ul>
+                                                    <li v-for="error in errors" :key="error">{{ error }}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="text-center text-lg mt-4 pt-2">
+                                            <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Confirm</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 </template>
