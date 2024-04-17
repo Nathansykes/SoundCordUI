@@ -5,6 +5,7 @@ import apiChannelService from '@/api/services/channel-service';
 import apiMessageService from '@/api/services/message-service';
 import type { Channel, Message } from '@/api/models';
 import router from '@/router';
+import ConnectionService from '@/api/signalR/connection-service';
 
 var props = defineProps({
     id: String
@@ -12,6 +13,7 @@ var props = defineProps({
 
 const currentChannel = ref(null as Channel | null);
 const messages = ref([] as Message[]);
+
 
 onMounted(() => {
     if(props.id == null) {
@@ -26,6 +28,7 @@ onMounted(() => {
         messages.value = response;
         orderMessagesByDate(messages.value);
     });
+    ConnectionService.init();
 });
 
 function orderMessagesByDate(messages: Message[]) {
