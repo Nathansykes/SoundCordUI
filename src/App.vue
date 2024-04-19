@@ -99,23 +99,21 @@ function onLoadOrResizse() {
 
 <template>
 
-    <div v-if="currentUser != null">
-        <div v-if="currentGroup != null">
-            <div v-if="isChoosingGroup">
-                <Sidebar />
-                <div id="main-content" style="">
-                    <Navbar />
-                    <div id="main-inner-content">
-                    </div>
+    <div v-if="currentUser != null && currentGroup != null">
+        <div v-if="isChoosingGroup">
+            <Sidebar />
+            <div id="main-content" style="">
+                <Navbar />
+                <div id="main-inner-content">
                 </div>
             </div>
-            <div v-else>
-                <Sidebar />
-                <div id="main-content" style="">
-                    <Navbar />
-                    <div id="main-inner-content">
-                        <router-view :key="$route.fullPath" />
-                    </div>
+        </div>
+        <div v-else>
+            <Sidebar />
+            <div id="main-content" style="">
+                <Navbar />
+                <div id="main-inner-content">
+                    <router-view :key="$route.fullPath" />
                 </div>
             </div>
         </div>

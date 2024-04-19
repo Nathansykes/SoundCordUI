@@ -111,35 +111,3 @@ function messageInputFocusLost() {
         </div>
     </div>
 </template>
-
-<style>
-.channel {
-    height: calc( var(--inner-content-height) - 10px);
-    max-height: calc( var(--inner-content-height) - 10px );
-}
-.chat {
-    max-height: 83%;
-    min-height: 83%;
-    overflow-y: scroll;
-}
-
-@media (min-width: 992px) {
-    .chat {
-        max-height: 90%;
-        min-height: 90%;
-    }
-}
-
-.chat {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-}
-.chat::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
-}
-  
-.chat-input {
-    padding: 10px;
-}
-
-</style>

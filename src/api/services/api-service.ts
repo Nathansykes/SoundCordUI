@@ -30,7 +30,7 @@ const apiClient = axios.create({
                 return new Date(value);
             }
             return value;
-        }),
+        })
 });
 
 class ApiService {

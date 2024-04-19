@@ -38,6 +38,7 @@ input.text-bg-light::placeholder {
 .sidebar-offcanvas {
     width: 280px;
     height: 100%;
+    max-width: 75vw;
 }
 
 .channel-sidebar-link:hover {
@@ -52,7 +53,14 @@ input.text-bg-light::placeholder {
 
 .channel {
     margin: auto;
+    height: calc(var(--inner-content-height) - 10px);
+    max-height: calc(var(--inner-content-height) - 10px);
 }
+
+.chat-input {
+    padding: 10px;
+}
+
 
 .chat {
     --rad: 20px;
@@ -61,15 +69,31 @@ input.text-bg-light::placeholder {
     flex-direction: column;
     padding: 20px;
     margin: auto;
+    max-height: 83%;
+    min-height: 83%;
+    overflow-y: scroll;
+
+    /* Internet Explorer 10+ */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+}
+
+.chat::-webkit-scrollbar {
+    /* Safari and Chrome */
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .chat {
+        max-height: 90%;
+        min-height: 90%;
+    }
 }
 
 .msg {
     position: relative;
     max-width: 75%;
-    padding: 7px 15px;
-    margin-bottom: 2px;
-    background: var(--bs-dark);
-    color: var(--bs-white);
 }
 
 .msg.sent {
@@ -77,12 +101,28 @@ input.text-bg-light::placeholder {
 
     /* moves it to the right */
     margin-left: auto;
+    text-align-last: end;
 }
 
 .msg.rcvd {
     border-radius: var(--rad-sm) var(--rad) var(--rad) var(--rad-sm);
     /* moves it to the left */
     margin-right: auto;
+}
+
+.msg .msg-content {
+    padding: 7px 15px;
+    margin-bottom: 2px;
+    background: var(--bs-dark);
+    color: var(--bs-white);
+}
+
+.msg.rcvd .msg-content {
+    border-radius: var(--rad-sm) var(--rad) var(--rad) var(--rad-sm);
+}
+
+.msg.sent .msg-content {
+    border-radius: var(--rad) var(--rad-sm) var(--rad-sm) var(--rad);
 }
 
 .msg-time.sent {
@@ -95,6 +135,23 @@ input.text-bg-light::placeholder {
     margin-right: auto;
 }
 
+/* Improve radius for messages group */
+
+.msg.sent .msg-first {
+    border-top-right-radius: var(--rad);
+}
+
+.msg.sent .msg-last {
+    border-bottom-right-radius: var(--rad);
+}
+
+.msg.rcvd .msg-first {
+    border-top-left-radius: var(--rad);
+}
+
+.msg.rcvd .msg-last {
+    border-bottom-left-radius: var(--rad);
+}
 
 @media (min-width: 992px) {
     #main-navbar {

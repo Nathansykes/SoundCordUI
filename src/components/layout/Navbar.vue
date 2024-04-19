@@ -23,7 +23,7 @@ onMounted(() => {
                         <i class="bi bi-list fs-5"></i>
                     </button>
                 </div>
-                <span class="navbar-brand" >{{ currentChannel?.channelName }}</span>
+                <span class="navbar-brand" >{{ currentChannel?.channelName}}</span>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <div class="d-flex" role="search">
