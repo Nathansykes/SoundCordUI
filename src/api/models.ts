@@ -71,10 +71,10 @@ export class SongRevision {
 }
 
 export class Message {
-    constructor(id: string, user: string, dateUtc: Date, content: string, channelId: string, songRevisionId: string | null, songTimestampMilliseconds: number | null) {
+    constructor(id: string, user: string, createdAt: Date, content: string, channelId: string, songRevisionId: string | null, songTimestampMilliseconds: number | null) {
         this.id = id;
         this.user = user;
-        this.dateUtc = dateUtc;
+        this.createdAt = createdAt;
         this.content = content;
         this.channelId = channelId;
         this.songRevisionId = songRevisionId;
@@ -83,7 +83,7 @@ export class Message {
 
     public id: string;
     public user: string;
-    public dateUtc: Date;
+    public createdAt: Date;
     public content: string;
     public channelId: string;
     public songRevisionId: string | null;

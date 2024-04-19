@@ -14,6 +14,23 @@ const apiClient = axios.create({
         "Access-Control-Allow-Origin": "*",
         Authorization: "Bearer " + ApplicationUser.getToken()?.accessToken,
     },
+    transformResponse: (data) =>
+        JSON.parse(data, (key, value) => {
+            if (key.toLowerCase().endsWith('at') 
+                    || key.toLowerCase().includes('utc') 
+                    || key.toLowerCase().includes('date')) {
+                
+                const date = new Date(value);
+                if (isNaN(date.getDate())) {
+                    return value;
+                }
+                if(!value.endsWith('Z')) {
+                    value = value + 'Z';
+                }
+                return new Date(value);
+            }
+            return value;
+        }),
 });
 
 class ApiService {

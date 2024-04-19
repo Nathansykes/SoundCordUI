@@ -21,14 +21,24 @@ export default class ConnectionService {
         }
     }
 
-    public static start() {
-        this.connection.start()
-            .catch((err) => console.error(err));
+    public static async start() : Promise<boolean> {
+        try {
+            await this.connection.start();
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     }
 
-    public static stop() {
-        this.connection.stop()
-            .catch((err) => console.error(err));
+    public static async stop() : Promise<boolean> {
+        try {
+            await this.connection.stop();
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     }
 
     public static on(event: string, callback: (...args: any[]) => void) {
@@ -39,21 +49,38 @@ export default class ConnectionService {
         this.connection.off(event, callback);
     }
     
-    public static send(method: string, ...args: any[]) {
-        this.connection.send(method, ...args)
-            .catch((err) => console.error(err));
+    public static async send(method: string, ...args: any[]) {
+        try {
+            await this.connection.send(method, ...args);
+        } catch (error) {
+            console.error(error);
+        }
     }
     
-    public static ConnectToChannel(channelId: string) {
-        this.send("ConnectToChannel", new channelRequest(channelId));
+    public static async ConnectToChannel(channelId: string) {
+        try {
+            await this.send("ConnectToChannel", new channelRequest(channelId));
+        }
+        catch(error) {
+            console.error(error);
+        }
     }
 
-    public static DisconnectFromChannel(channelId: string) {
-        this.send("DisconnectFromChannel", new channelRequest(channelId));
+    public static async DisconnectFromChannel(channelId: string) {
+        try {
+            await this.send("DisconnectFromChannel", new channelRequest(channelId));
+        }
+        catch(error) {
+            console.error(error);
+        }
     }
 
-    public static SendMessage(channelId: string, content: string) {
-        this.send("Message", new messageRequest(channelId, content));
+    public static async SendMessage(channelId: string, content: string) {
+        try {
+            await this.send("Message", new messageRequest(channelId, content));
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 

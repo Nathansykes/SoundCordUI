@@ -177,6 +177,12 @@ async function leaveGroupConfirm() {
     closeLeaveGroup();
 }
 
+function closeSidebar(){
+    if (store.isMobile) {
+        document.getElementById('close-sidebar-btn')?.click();
+    }
+}
+
 </script>
 
 <template>
@@ -185,7 +191,7 @@ async function leaveGroupConfirm() {
             <div class="align-items-center text-white text-decoration-none">
                 <span class="fs-4" style="margin-top:4px">
                     <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span> <button type="button" @click="openUser" class="btn btn-sm"><i class="bi bi-person-plus fs-5"></i></button>
-                    <button class="btn btn-sm d-lg-none float-end padding-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-sidebar-offcanvas" aria-controls="main-sidebar-offcanvas" role="button" title="Toggle Sidebar">
+                    <button id="close-sidebar-btn" class="btn btn-sm d-lg-none float-end padding-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-sidebar-offcanvas" aria-controls="main-sidebar-offcanvas" role="button" title="Toggle Sidebar">
                         <i class="bi bi-x-lg fs-5 "></i>
                     </button>
                 </span>
@@ -204,7 +210,7 @@ async function leaveGroupConfirm() {
                     </div>
                 </form>
                 <li class="nav-item" v-for="channel in channels" :key="channel.id" >
-                    <router-link :to="`/channels/${channel.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ channel.channelName }}</router-link>  
+                    <router-link @click="closeSidebar" :to="`/channels/${channel.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ channel.channelName }}</router-link>  
                 </li>
                 <hr />
                 <i>Songs <button class="btn btn-sm btn-secondary float-end" title="Open Create Song" @click="toggleCreateSong"><i :class="`bi bi-${creatingSong ? 'x' : 'plus'}-lg`" ></i></button></i>
@@ -219,7 +225,7 @@ async function leaveGroupConfirm() {
                     </div>
                 </form>
                 <li class="nav-item" v-for="song in songs" :key="song.id" >
-                    <router-link :to="`/song/${song.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ song.songName }}</router-link>  
+                    <router-link @click="closeSidebar" :to="`/song/${song.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ song.songName }}</router-link>  
                 </li>
             </ul>
           

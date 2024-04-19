@@ -79,7 +79,12 @@ function onLoadOrResizse() {
     store.isMobile = window.innerWidth < 992;
 
     document.body.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
-    document.body.style.setProperty('--main-content-width', "calc(100vw - (280px + var(--scrollbar-width)))");
+
+    if(store.isMobile) {
+        document.body.style.setProperty('--main-content-width', "100vw");
+    } else {
+        document.body.style.setProperty('--main-content-width', "calc(100vw - (280px + var(--scrollbar-width)))");
+    }
     
     const navbarHeight = document.getElementById("main-navbar")?.offsetHeight;
     if (navbarHeight){
