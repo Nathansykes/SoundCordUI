@@ -51,12 +51,12 @@ export class Song {
 }
 
 export class SongRevision {
-    constructor(id: string, songId: string, createdByUser: Song, revision: number, createdDateUtc: Date, fileMetadataId: string, lengthMilliseconds: number) {
+    constructor(id: string, songId: string, createdByUser: Song, revisionName: string, createdUtc: Date, fileMetadataId: string, lengthMilliseconds: number) {
         this.id = id;
         this.songId = songId;
         this.createdByUser = createdByUser;
-        this.revision = revision;
-        this.createdDateUtc = createdDateUtc;
+        this.revisionName = revisionName;
+        this.createdUtc = createdUtc;
         this.fileMetadataId = fileMetadataId;
         this.lengthMilliseconds = lengthMilliseconds;
     }
@@ -64,8 +64,8 @@ export class SongRevision {
     public id: string;
     public songId: string;
     public createdByUser: Song;
-    public revision: number;
-    public createdDateUtc: Date;
+    public revisionName: string;
+    public createdUtc: Date;
     public fileMetadataId: string;
     public lengthMilliseconds: number;
 }

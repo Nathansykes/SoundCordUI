@@ -40,13 +40,13 @@ const routes = [
         props: true,
         component: () => import("./components/channels/Channel.vue"),
     },
-    // {
-    //     //Song
-    //     path: "/song/:id",
-    //     name: "Song",
-    //     props: true,
-    //     component: () => import("./components/song/Song.vue"),
-    // },
+    {
+        //Song
+        path: "/songs/:id",
+        name: "Song",
+        props: true,
+        component: () => import("./components/songs/Song.vue"),
+    },
     {
         //account section
         path: "/account",

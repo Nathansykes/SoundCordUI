@@ -42,7 +42,7 @@ onMounted(() => {
     }).then(() => {
         if(!currentGroup.value) return;
         apiChannelService.getChannels(currentGroup.value.id).then((response) => {
-            channels.value = response;
+            channels.value = response.filter(c => c.song == null);
             sortChannels();
         });
     }).then(() => {
@@ -225,7 +225,7 @@ function closeSidebar(){
                     </div>
                 </form>
                 <li class="nav-item" v-for="song in songs" :key="song.id" >
-                    <router-link @click="closeSidebar" :to="`/song/${song.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ song.songName }}</router-link>  
+                    <router-link @click="closeSidebar" :to="`/songs/${song.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ song.songName }}</router-link>  
                 </li>
             </ul>
           
