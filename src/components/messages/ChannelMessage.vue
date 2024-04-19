@@ -61,16 +61,15 @@ onMounted(() => {
         currentUser.value?.userName.toLowerCase() === props.message.user.toLowerCase();
 
     isFirstInGroup.value =
-        props.previousMessage?.user != props.message.user || minutesSinceLastMessage > 15;
+        props.previousMessage == null 
+        || props.previousMessage?.user != props.message.user 
+        || minutesSinceLastMessage > 15;
 
     isLastInGroup.value =
-        props.nextMessage == null ||
-        props.nextMessage?.user != props.message.user ||
-        minutesUntilNextMessage > 15;
+        props.nextMessage == null 
+        || props.nextMessage?.user != props.message.user 
+        || minutesUntilNextMessage > 15;
         
-    if (isLastInGroup.value) {
-        className.value = "msg-last";
-    }
     if (isFirstInGroup.value) {
         className.value = "msg-first";
     }
