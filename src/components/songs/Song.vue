@@ -4,7 +4,6 @@ import Channel from '@/components/channels/Channel.vue'
 import { Song, SongRevision } from '@/api/models';
 import apiSongService from '@/api/services/song-service';
 import SessionStorageService from '@/services/session-storage-service';
-import { Tab } from 'bootstrap';
 
 // Define the props for the component
 var props = defineProps({
@@ -111,8 +110,7 @@ function viewComments(songRevisionId: string) {
     console.log('view comments for song revision id: ' + songRevisionId);
     SessionStorageService.setSessionStorageItem('currentSongRevision', songRevisionId);
     var linkEle = document.querySelector('a[href="#comments-tab"]') as HTMLElement;
-    var tab = Tab.getOrCreateInstance(linkEle);
-    tab.show();
+    linkEle.click();
 }
 
 function bytesToSizeString(bytes: number) {
