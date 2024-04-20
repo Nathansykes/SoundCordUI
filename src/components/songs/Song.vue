@@ -63,13 +63,22 @@ async function fileUploadSubmit(event: Event) {
             var audio = document.createElement('audio');
             audio.src = data.toString();
             audio.addEventListener('loadedmetadata', async function() {
-                const durationMs = Math.floor(audio.duration * 1000);
-                const base64 = data.toString().replace(/^data:(.*,)?/, '');
-                const result = await apiSongService.createSongRevision(props.id, newRevisionName, file.name, base64, durationMs);
-                files.value.push(result);
-                sortFiles();
+
+                try {
+
+                    const durationMs = Math.floor(audio.duration * 1000);
+                    const base64 = data.toString().replace(/^data:(.*,)?/, '');
+                    const contentType = data.toString().match(/(.*);base64/)?.[1].replace('data:', '');
+                    const result = await apiSongService.createSongRevision(props.id, newRevisionName, file.name, base64, contentType, durationMs);
+                    files.value.push(result);
+                    sortFiles();
+                } catch (error) {
+                    console.error(error);
+                }
                 resetForm(form);
                 uploading.value = false;
+
+
             }, false);
         }
         reader.readAsDataURL(file);
@@ -104,6 +113,13 @@ function viewComments(songRevisionId: string) {
     var linkEle = document.querySelector('a[href="#comments-tab"]') as HTMLElement;
     var tab = Tab.getOrCreateInstance(linkEle);
     tab.show();
+}
+
+function bytesToSizeString(bytes: number) {
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 Byte';
+    const i = parseInt(String(Math.floor(Math.log(bytes) / Math.log(1024))));
+    return Math.round(bytes / Math.pow(1024, i)) + sizes[i];
 }
 
 </script>
@@ -160,7 +176,22 @@ function viewComments(songRevisionId: string) {
                     </div>
                     <div class="card-body">
                         <p class="card-title">Uploaded: {{ getDateString(songRev.createdUtc) }}</p>
-                        <p class="card-text">Duration: {{ miliisecondsToMinutesAndSeconds(songRev.lengthMilliseconds) }}</p>
+                        <p class="card-text">
+                            <ul>
+                                <li>
+                                    Duration: {{ miliisecondsToMinutesAndSeconds(songRev.lengthMilliseconds) }}
+                                </li>
+                                <li>
+                                    Filename: {{ songRev.file?.fileName +'.' + songRev.file?.extension }}
+                                </li>
+                                <li>
+                                    Type: {{ songRev.file?.extension }}
+                                </li>
+                                <li>
+                                    Size: {{ bytesToSizeString(songRev.file?.contentLength || 0)}}
+                                </li>
+                            </ul>
+                        </p>
                     </div>
                 </div>
             </div>

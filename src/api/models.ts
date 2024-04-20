@@ -51,7 +51,7 @@ export class Song {
 }
 
 export class SongRevision {
-    constructor(id: string, songId: string, createdByUser: Song, revisionName: string, createdUtc: Date, fileMetadataId: string, lengthMilliseconds: number) {
+    constructor(id: string, songId: string, createdByUser: Song, revisionName: string, createdUtc: Date, fileMetadataId: string, lengthMilliseconds: number, file: FileMetadata | null = null) {
         this.id = id;
         this.songId = songId;
         this.createdByUser = createdByUser;
@@ -59,6 +59,7 @@ export class SongRevision {
         this.createdUtc = createdUtc;
         this.fileMetadataId = fileMetadataId;
         this.lengthMilliseconds = lengthMilliseconds;
+        this.file = file;
     }
 
     public id: string;
@@ -68,6 +69,7 @@ export class SongRevision {
     public createdUtc: Date;
     public fileMetadataId: string;
     public lengthMilliseconds: number;
+    public file: FileMetadata | null = null;
 }
 
 export class Message {
@@ -91,21 +93,23 @@ export class Message {
 }
 
 export class FileMetadata {
-    constructor(id: string, name: string, extension: string, content: string, lengthBytes: number, uploadDateUtc: Date, songRevisionId: string | null) {
+    constructor(id: string, fileName: string, extension: string, content: string | null, contentLength: number | null, contentType: string | null, uploadedUtc: Date, uploadedByUser: string) {
         this.id = id;
-        this.name = name;
+        this.fileName = fileName;
         this.extension = extension;
         this.content = content;
-        this.lengthBytes = lengthBytes;
-        this.uploadDateUtc = uploadDateUtc;
-        this.songRevisionId = songRevisionId;
+        this.contentLength = contentLength;
+        this.contentType = contentType;
+        this.uploadedUtc = uploadedUtc;
+        this.uploadedByUser = uploadedByUser;
     }
     
     public id: string;
-    public name: string;
+    public fileName: string;
     public extension: string;
-    public content: string;
-    public lengthBytes: number;
-    public uploadDateUtc: Date;
-    public songRevisionId: string | null;
+    public content: string | null;
+    public contentLength: number | null;
+    public contentType: string | null;
+    public uploadedUtc: Date;
+    public uploadedByUser: string;
 }

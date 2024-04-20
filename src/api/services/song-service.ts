@@ -20,7 +20,7 @@ class ApiSongService {
         return await ApiService.get<SongRevision>(`/songs/${songId}/revisions/${revisionId}`);
     }
 
-    public async createSongRevision(songId: string, revisionName: string, fileName: string, base64Content: string, lengthMilliseconds: number) : Promise<SongRevision> {
+    public async createSongRevision(songId: string, revisionName: string, fileName: string, base64Content: string, contentType: string | undefined, lengthMilliseconds: number) : Promise<SongRevision> {
         
         const parts = fileName.split(".");
         
@@ -34,9 +34,11 @@ class ApiSongService {
             file: {
                 fileName: fileNameWithoutExtension,
                 extension: extension,
-                content: base64Content
+                content: base64Content,
+                contentType: contentType
             }
         }
+
         
         
         return await ApiService.post<SongRevision>(`/songs/${songId}/revisions`, data);
