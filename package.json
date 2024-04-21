@@ -17,6 +17,7 @@
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "fast-xml-parser": "^4.3.6",
+    "opfs-tools": "^0.3.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

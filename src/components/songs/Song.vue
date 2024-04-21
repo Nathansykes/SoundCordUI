@@ -219,7 +219,7 @@ function bytesToSizeString(bytes: number) {
             </div>
         </div>
         <div class="tab-pane fade" id="comments-tab" role="tabpanel">
-            <SongRevisionComments v-if="currentSongRevisionId !== null && currentSong !== null"  :song="currentSong" :songRevsionId="currentSongRevisionId" />
+            <SongRevisionComments :key="currentSongRevisionId" v-if="currentSongRevisionId !== null && currentSong !== null"  :song="currentSong" :songRevsionId="currentSongRevisionId" />
         </div>
     </div>
 </template>

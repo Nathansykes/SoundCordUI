@@ -17,8 +17,8 @@ class ApiSongService {
         return await ApiService.get<SongRevision[]>(`/songs/${songId}/revisions`);
     }
 
-    public async getSongRevision(songId: string, revisionId: string) : Promise<SongRevision>  {
-        return await ApiService.get<SongRevision>(`/songs/${songId}/revisions/${revisionId}`);
+    public async getSongRevision(revisionId: string) : Promise<SongRevision>  {
+        return await ApiService.get<SongRevision>(`/revisions/${revisionId}`); 
     }
 
     public async getSongRevisionComments(channelId: string, revisionId: string) : Promise<Message[]>  {

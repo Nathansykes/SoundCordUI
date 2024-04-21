@@ -112,4 +112,8 @@ export class FileMetadata {
     public contentType: string | null;
     public uploadedUtc: Date;
     public uploadedByUser: string;
+
+    static toDataUriString(file: FileMetadata) : string {
+        return `data:${file.contentType};base64,${file.content}`;
+    }
 }

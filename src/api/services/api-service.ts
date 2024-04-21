@@ -2,6 +2,7 @@ import axios, { AxiosError, type AxiosProgressEvent } from "axios";
 import ApplicationUser from "@/application-user";
 import ApiAccountService from "./account-service";
 import router from "@/router";
+import type { FileMetadata } from "../models";
 
 axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers["Access-Control-Allow-Methods"] =
@@ -91,6 +92,12 @@ class ApiService {
 
     public async post<T>(url: string, data: any | null = null, uploadProgress: onProgress = null, downloadProgress: onProgress = null): Promise<T> {
         return await this.trySendRequest<T>(url, "POST", data, uploadProgress, downloadProgress);
+    }
+
+    public async downloadFile(fileMetadataId: string, uploadProgress: onProgress = null, downloadProgress: onProgress = null): Promise<FileMetadata> {
+        
+        const response = await this.trySendRequest<FileMetadata>('files/download/' + fileMetadataId, "POST", null, uploadProgress, downloadProgress);
+        return response;
     }
 }
 
