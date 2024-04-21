@@ -7,6 +7,8 @@ import { FileService } from '@/services/file-service';
 import type { AxiosProgressEvent } from 'axios';
 import Plyr from 'plyr';
 import ConnectionService from '@/api/signalR/connection-service';
+import WaveSurfer from 'wavesurfer.js'
+
 
 
 
@@ -34,7 +36,43 @@ onMounted(async () => {
     // Call the API to get the song revision
     revision.value = await apiSongService.getSongRevision(props.songRevsionId);
     comments.value = await apiSongService.getSongRevisionComments(props.song.channelId, props.songRevsionId);
-    player.value = new Plyr('#song-player', { controls: ['play', 'progress', 'current-time']});
+    player.value = new Plyr('#song-player', { 
+        controls: [
+            'play',
+            'mute', 
+            'volume', 
+            'rewind', 
+            'current-time', 
+            'duration', 
+            'fast-forward', 
+            'restart', 
+            'download'
+        ],
+        seekTime: 5,
+    });
+    player.value.on('timeupdate', (event) => {
+        
+        if(wavesurfer.value && player.value) {
+            wavesurfer.value.seekTo(player.value.currentTime / player.value.duration);
+        }
+    });
+
+
+    document.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        if (target.dataset['plyr'] === 'download') {
+            event.preventDefault();
+            
+            const audio = document.getElementById('song-player') as HTMLAudioElement;
+            const source = audio.getElementsByTagName('source')[0];
+            const url = source.src;
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (revision.value?.revisionName ?? '' + revision.value?.file?.extension ?? '');
+            a.click();
+        }
+    });
+
     if (await audioFileService.fileExists(fileName.value)){
         loadFile();
         fileLoaded.value = true;
@@ -84,6 +122,7 @@ async function loadFile() : Promise<void> {
 
     var blob = FileService.base64DataUriToBlob(base64);
     setSource(blob);
+    
 }
 
 function setSource(blob: Blob) {
@@ -97,6 +136,7 @@ function setSource(blob: Blob) {
         downloading.value = false;
         fileLoaded.value = true;
     }
+    configureWave(blobUrl);
 }
 
 async function userGetFile(){
@@ -118,6 +158,18 @@ const downloadProgressPercent = ref(null as number | null);
 
 function onDownloadProgress(event: AxiosProgressEvent) : void {
     downloadProgressPercent.value = Math.round((event.loaded / (event.total ?? 1)) * 100);
+}
+
+
+const wavesurfer = ref(null as WaveSurfer | null);
+
+function configureWave(src: string){
+    wavesurfer.value = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#4F4A85',
+        progressColor: '#383351',
+        url: src,
+    })
 }
 
 </script>
@@ -142,6 +194,7 @@ function onDownloadProgress(event: AxiosProgressEvent) : void {
                 <source src="" type="audio/wav">
             </audio>
         </div>
+        <div id="waveform"></div>
         <hr />
         <p>{{ revision?.revisionName }}</p>
     </div>
