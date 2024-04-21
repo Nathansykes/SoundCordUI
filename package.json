@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@azure/static-web-apps-cli": "^1.1.7",
+    "@azure/static-web-apps-cli": "^0.2.1",
     "@microsoft/signalr": "^8.0.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
