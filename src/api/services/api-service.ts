@@ -2,7 +2,6 @@ import axios, { AxiosError, type AxiosInstance, type AxiosProgressEvent } from "
 import ApplicationUser from "@/application-user";
 import ApiAccountService from "./account-service";
 import router from "@/router";
-import type { FileMetadata } from "../models";
 
 axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers["Access-Control-Allow-Methods"] =

@@ -5,7 +5,6 @@ import { Song, SongRevision } from '@/api/models';
 import apiSongService from '@/api/services/song-service';
 import SessionStorageService from '@/services/session-storage-service';
 import type { AxiosProgressEvent } from 'axios';
-import type { onProgress } from  '@/api/services/api-service';
 import SongRevisionComments from './SongRevisionComments.vue';
 
 // Define the props for the component
@@ -35,7 +34,7 @@ onMounted(() => {
         sortFiles();
     });
 
-    window.addEventListener("sessionstorage", function(e) {
+    window.addEventListener("sessionstorage", function() {
         currentSongRevisionId.value = SessionStorageService.getSessionStorageItem('currentSongRevisionId');
     });
 });
@@ -97,10 +96,6 @@ const uploadProgressPercent = ref(null as number | null);
 
 function onUploadProgress(event: AxiosProgressEvent) : void {
     uploadProgressPercent.value = Math.round((event.loaded / (event.total ?? 1)) * 100);
-}
-
-function onDownloadProgress(event: AxiosProgressEvent) : void {
-    console.log('download progress: ' + event.loaded + ' of ' + event.total);
 }
 
 function validateForm(form: HTMLFormElement) : boolean {

@@ -1,5 +1,5 @@
 import { file, dir, write } from 'opfs-tools';
-import { FileMetadata, type Message } from "@/api/models";
+import { FileMetadata } from "@/api/models";
 import ApiService from "@/api/services/api-service";
 import type { onProgress } from "@/api/services/api-service";
 import apiService from '@/api/services/api-service';
@@ -16,12 +16,10 @@ export class FileService {
     public directory: string;
 
     public static async blobToBase64DataUri(blob: Blob) : Promise<string> {
-        return new Promise((resolve, _) => {
+        return new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => {
-
                 
-
                 resolve(reader.result as string);
             } 
             reader.readAsDataURL(blob);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, defineProps, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import SessionStorageService from '@/services/session-storage-service';
 import apiChannelService from '@/api/services/channel-service';
 import apiMessageService from '@/api/services/message-service';
