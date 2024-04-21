@@ -61,17 +61,17 @@ function setSource(blob: Blob) {
 }
 
 async function userGetFile(){
-    //if(!(await audioFileService.fileExists(fileName.value))){
-    downloading.value = true;
-    const file = await FileService.downloadFile(revision.value!.fileMetadataId, onDownloadProgress);
+    if(!(await audioFileService.fileExists(fileName.value))){
+        downloading.value = true;
+        const file = await FileService.downloadFile(revision.value!.fileMetadataId, onDownloadProgress);
 
 
-    const dataUri = FileMetadata.toDataUriString(file);
-    await audioFileService.writeFile(fileName.value, dataUri);
-    //downloading.value = false;
-    //}
+        const dataUri = FileMetadata.toDataUriString(file);
+        await audioFileService.writeFile(fileName.value, dataUri);
+        downloading.value = false;
+    }
     loadFile();
-    
+
 }
 
 const downloading = ref(false);

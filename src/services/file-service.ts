@@ -15,21 +15,25 @@ export class FileService {
 
     public directory: string;
 
-    static async blobToBase64DataUri(blob: Blob) : Promise<string> {
+    public static async blobToBase64DataUri(blob: Blob) : Promise<string> {
         return new Promise((resolve, _) => {
             const reader = new FileReader();
             reader.onloadend = () => {
 
-                const fullString = reader.result as string;
-                const justContent = fullString.substring(fullString.indexOf(',') + 1);
+                
 
-                resolve(justContent);
+                resolve(reader.result as string);
             } 
             reader.readAsDataURL(blob);
         });
     }
+
+    public static async blobToBase64Content(blob: Blob) : Promise<string> {
+        const fullString = await FileService.blobToBase64DataUri(blob);
+        return fullString.substring(fullString.indexOf(',') + 1);
+    }
     
-    static base64DataUriToBlob(dataUri: string, sliceSize: number = 512) : Blob {
+    public static base64DataUriToBlob(dataUri: string, sliceSize: number = 512) : Blob {
         // data:{contentType};base64,{base64Data}
         const BASE64_MARKER = ';base64,';
         const base64Index = dataUri.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
@@ -59,24 +63,24 @@ export class FileService {
         return `/${this.directory}/${fileName}`;
     }
 
-    async fileExists(fileName: string) : Promise<boolean> {
+    public async fileExists(fileName: string) : Promise<boolean> {
         
         return await file(this.getPath(fileName)).exists();
     }
 
-    async writeFile(fileName: string, content: string) : Promise<void> {
+    public async writeFile(fileName: string, content: string) : Promise<void> {
         await write(this.getPath(fileName), content);
     }
 
-    async deleteFile(fileName: string) : Promise<void> {
+    public async deleteFile(fileName: string) : Promise<void> {
         await file(this.getPath(fileName)).remove();
     }
 
-    async getOrCreateDirectory(path: string) : Promise<void> {
+    public async getOrCreateDirectory(path: string) : Promise<void> {
         await dir(path).create();
     }
 
-    async getFile(fileName: string) : Promise<string> {
+    public async getFile(fileName: string) : Promise<string> {
         return await file(this.getPath(fileName)).text();
     }
 
@@ -102,7 +106,7 @@ export class FileService {
 
 
 
-        meta.content = await FileService.blobToBase64DataUri(blob);
+        meta.content = await FileService.blobToBase64Content(blob);
         return meta;
     }
 }
