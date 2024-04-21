@@ -23,7 +23,9 @@ export default class ConnectionService {
 
     public static async start() : Promise<boolean> {
         try {
-            await this.connection.start();
+            if(this.connection.state !== signalR.HubConnectionState.Connected) {
+                await this.connection.start();
+            }
             return true;
         } catch (error) {
             console.error(error);

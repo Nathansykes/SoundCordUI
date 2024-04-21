@@ -46,6 +46,11 @@ onBeforeUnmount(() => {
 function receiveMessage(...args: any[]) {
     const message = args[0] as MessageModel;
     message.createdAt = new Date(message.createdAt + 'Z');
+
+    if (message.channelId != currentChannel.value!.id || message.songTimestampMilliseconds != null) {
+        return;
+    }
+
     messages.value.push(message);
     formatMessages();
 }
@@ -82,7 +87,6 @@ function formatMessages() {
         var chat = document.querySelector('.chat') as HTMLElement;
         chat.scrollTop = chat.scrollHeight;
     }, 100);
-    
 }
 function messageInputFocusLost() {
     if (messageContent == null || messageContent.trim() === '') {

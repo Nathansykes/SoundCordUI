@@ -10,6 +10,10 @@ import './assets/bootstrap/bootstrap-litera.css';
 import './assets/bootstrap/icons/bootstrap-icons.min.css';
 import './assets/css/main.css';
 
+//import css for plyr
+import 'plyr/dist/plyr.css';
+
+
 const app = createApp(App)
 //app.use(plugin)
 app.use(router)

@@ -34,9 +34,6 @@ onMounted(() => {
         sortFiles();
     });
 
-    window.addEventListener("sessionstorage", function() {
-        currentSongRevisionId.value = SessionStorageService.getSessionStorageItem('currentSongRevisionId');
-    });
 });
 
 function miliisecondsToMinutesAndSeconds(ms: number) {
@@ -69,9 +66,7 @@ async function fileUploadSubmit(event: Event) {
             var audio = document.createElement('audio');
             audio.src = data.toString();
             audio.addEventListener('loadedmetadata', async function() {
-
                 try {
-
                     const durationMs = Math.floor(audio.duration * 1000);
                     const base64 = data.toString().replace(/^data:(.*,)?/, '');
                     const contentType = data.toString().match(/(.*);base64/)?.[1].replace('data:', '');
@@ -124,7 +119,6 @@ function download(fileMetadataId: string) {
 function viewComments(songRevisionId: string) {
     currentSongRevisionId.value = songRevisionId;
     console.log('view comments for song revision id: ' + currentSongRevisionId.value);
-    SessionStorageService.setSessionStorageItem('currentSongRevisionId', currentSongRevisionId.value);
     var linkEle = document.querySelector('a[href="#comments-tab"]') as HTMLElement;
     linkEle.click();
 }
@@ -134,6 +128,12 @@ function bytesToSizeString(bytes: number) {
     if (bytes == 0) return '0 Byte';
     const i = parseInt(String(Math.floor(Math.log(bytes) / Math.log(1024))));
     return Math.round(bytes / Math.pow(1024, i)) + sizes[i];
+}
+
+function showFiles(){
+    var linkEle = document.querySelector('a[href="#file-tab"]') as HTMLElement;
+    linkEle.click();
+
 }
 
 </script>
@@ -215,6 +215,7 @@ function bytesToSizeString(bytes: number) {
         </div>
         <div class="tab-pane fade" id="comments-tab" role="tabpanel">
             <SongRevisionComments :key="currentSongRevisionId" v-if="currentSongRevisionId !== null && currentSong !== null"  :song="currentSong" :songRevsionId="currentSongRevisionId" />
+            <button v-else class="btn btn-secondary" type="button" @click="showFiles()" >Select a version/file to view comments</button>
         </div>
     </div>
 </template>
