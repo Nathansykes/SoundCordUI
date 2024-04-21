@@ -1,4 +1,10 @@
 import { file, dir, write } from 'opfs-tools';
+import { FileMetadata, type Message } from "@/api/models";
+import ApiService from "@/api/services/api-service";
+import type { onProgress } from "@/api/services/api-service";
+import apiService from '@/api/services/api-service';
+import axios from 'axios';
+import ApplicationUser from '@/application-user';
 
 export class FileService {
 
@@ -9,6 +15,19 @@ export class FileService {
 
     public directory: string;
 
+    static async blobToBase64DataUri(blob: Blob) : Promise<string> {
+        return new Promise((resolve, _) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+
+                const fullString = reader.result as string;
+                const justContent = fullString.substring(fullString.indexOf(',') + 1);
+
+                resolve(justContent);
+            } 
+            reader.readAsDataURL(blob);
+        });
+    }
     
     static base64DataUriToBlob(dataUri: string, sliceSize: number = 512) : Blob {
         // data:{contentType};base64,{base64Data}
@@ -59,6 +78,32 @@ export class FileService {
 
     async getFile(fileName: string) : Promise<string> {
         return await file(this.getPath(fileName)).text();
+    }
+
+    public static async downloadFile(fileMetadataId: string, downloadProgress: onProgress = null): Promise<FileMetadata> {
+        const metaPath = `/files/download/${fileMetadataId}/meta`;
+        const contentPath = `/files/download/${fileMetadataId}/content`;
+
+        const meta = await ApiService.post<FileMetadata>(metaPath, null, null);
+
+
+        const client = axios.create({
+            baseURL: import.meta.env.VITE_API_BASE_URL,
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                Authorization: "Bearer " + ApplicationUser.getToken()?.accessToken,
+            },
+            responseType: 'blob',
+        });
+
+        const blob = await ApiService.useClient(client).post<Blob>(contentPath, null, null, downloadProgress);
+        apiService.useDefaultClient();
+
+
+
+        meta.content = await FileService.blobToBase64DataUri(blob);
+        return meta;
     }
 }
 

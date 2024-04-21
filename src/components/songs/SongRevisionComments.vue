@@ -4,9 +4,9 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import apiSongService from '@/api/services/song-service';
 import apiService from '@/api/services/api-service';
 import SessionStorageService from '@/services/session-storage-service';
-import { file, dir, write } from 'opfs-tools';
-import type { OPFSDirWrap } from '../../../node_modules/opfs-tools/dist/directory.d.ts';
 import { FileService } from '@/services/file-service';
+import type { AxiosProgressEvent } from 'axios';
+import { set } from 'mongoose';
 
 
 
@@ -45,34 +45,50 @@ async function loadFile() : Promise<void> {
     const base64 = await audioFileService.getFile(fileName.value);
 
     var blob = FileService.base64DataUriToBlob(base64);
+    setSource(blob);
+}
+
+function setSource(blob: Blob) {
     var blobUrl = URL.createObjectURL(blob);
         
     const audio = document.getElementById('revisionAudio') as HTMLAudioElement;
     audio.src = blobUrl;
     audio.pause();
     audio.load();
+    audio.oncanplaythrough = () => {
+        downloading.value = false;
+    }
 }
 
 async function userGetFile(){
-    
-    if(!(await audioFileService.fileExists(fileName.value))){
-        const file : FileMetadata = await apiService.downloadFile(revision.value!.fileMetadataId);
-        const dataUri = FileMetadata.toDataUriString(file);
-        await audioFileService.writeFile(fileName.value, dataUri);
-    }
+    //if(!(await audioFileService.fileExists(fileName.value))){
+    downloading.value = true;
+    const file = await FileService.downloadFile(revision.value!.fileMetadataId, onDownloadProgress);
+
+
+    const dataUri = FileMetadata.toDataUriString(file);
+    await audioFileService.writeFile(fileName.value, dataUri);
+    //downloading.value = false;
+    //}
     loadFile();
+    
 }
 
+const downloading = ref(false);
+const downloadProgressPercent = ref(null as number | null);
+
+function onDownloadProgress(event: AxiosProgressEvent) : void {
+    downloadProgressPercent.value = Math.round((event.loaded / (event.total ?? 1)) * 100);
+}
 
 </script>
 
 <template>
     <div>
+        <audio controls id="revisionAudio" src="" style="width:100%" />
+        <button @click="userGetFile" type="button" class="btn btn-secondary">Load</button>
+        <p v-if="downloading == true" > {{ downloadProgressPercent }}%</p>
         <p>{{ revision?.revisionName }}</p>
-        <p>{{ revision?.id }}</p>
-        <p>{{ revision?.fileMetadataId }}</p>
-        <button @click="userGetFile">Get File</button>
-        <audio controls id="revisionAudio" src=""  />
     </div>
 </template>
 
