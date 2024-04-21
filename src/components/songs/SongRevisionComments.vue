@@ -51,9 +51,20 @@ onMounted(async () => {
         seekTime: 5,
     });
     player.value.on('timeupdate', (event) => {
-        
         if(wavesurfer.value && player.value) {
             wavesurfer.value.seekTo(player.value.currentTime / player.value.duration);
+        }
+    });
+
+    wavesurfer.value = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#4F4A85',
+        progressColor: '#383351'
+    })
+
+    wavesurfer.value.on('click', (event) => {
+        if(wavesurfer.value && player.value) {
+            player.value.currentTime = wavesurfer.value.getCurrentTime();
         }
     });
 
@@ -136,7 +147,7 @@ function setSource(blob: Blob) {
         downloading.value = false;
         fileLoaded.value = true;
     }
-    configureWave(blobUrl);
+    wavesurfer.value?.loadBlob(blob);
 }
 
 async function userGetFile(){
@@ -163,14 +174,6 @@ function onDownloadProgress(event: AxiosProgressEvent) : void {
 
 const wavesurfer = ref(null as WaveSurfer | null);
 
-function configureWave(src: string){
-    wavesurfer.value = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: '#4F4A85',
-        progressColor: '#383351',
-        url: src,
-    })
-}
 
 </script>
 
@@ -178,6 +181,10 @@ function configureWave(src: string){
 .audio-player {
     --plyr-audio-control-color: var(--bs-body-color );
     --plyr-audio-controls-background: var(--bs-body-bg);
+}
+
+.plyr__controls {
+    display: inline-flex;
 }
 
 </style>
