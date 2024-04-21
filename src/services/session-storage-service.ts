@@ -30,4 +30,10 @@ export default class SessionStorageService {
     public static getSessionStorageItem(key: string): string | null {
         return sessionStorage.getItem(key);
     }
+
+    
+    public static removeSessionStorageItem(key: string): void {
+        sessionStorage.removeItem(key);
+        window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { key } }));
+    }
 }

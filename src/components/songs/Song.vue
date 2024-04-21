@@ -4,6 +4,9 @@ import Channel from '@/components/channels/Channel.vue'
 import { Song, SongRevision } from '@/api/models';
 import apiSongService from '@/api/services/song-service';
 import SessionStorageService from '@/services/session-storage-service';
+import type { AxiosProgressEvent } from 'axios';
+import type { onProgress } from  '@/api/services/api-service';
+import SongRevisionComments from './SongRevisionComments.vue';
 
 // Define the props for the component
 var props = defineProps({
@@ -14,6 +17,7 @@ var props = defineProps({
 })
 
 const currentSong = ref(null as Song | null);
+const currentSongRevisionId = ref(null as string | null);
 
 const files = ref([] as SongRevision[]);
 
@@ -29,6 +33,10 @@ onMounted(() => {
     apiSongService.getSongRevisions(props.id).then((response) => {
         files.value = response;
         sortFiles();
+    });
+
+    window.addEventListener("sessionstorage", function(e) {
+        currentSongRevisionId.value = SessionStorageService.getSessionStorageItem('currentSongRevisionId');
     });
 });
 
@@ -68,7 +76,8 @@ async function fileUploadSubmit(event: Event) {
                     const durationMs = Math.floor(audio.duration * 1000);
                     const base64 = data.toString().replace(/^data:(.*,)?/, '');
                     const contentType = data.toString().match(/(.*);base64/)?.[1].replace('data:', '');
-                    const result = await apiSongService.createSongRevision(props.id, newRevisionName, file.name, base64, contentType, durationMs);
+                    const result = await apiSongService.createSongRevision(props.id, newRevisionName, file.name, base64, contentType, durationMs, onUploadProgress);
+                    uploadProgressPercent.value = null;
                     files.value.push(result);
                     sortFiles();
                 } catch (error) {
@@ -82,7 +91,16 @@ async function fileUploadSubmit(event: Event) {
         }
         reader.readAsDataURL(file);
     }
+}
 
+const uploadProgressPercent = ref(null as number | null);
+
+function onUploadProgress(event: AxiosProgressEvent) : void {
+    uploadProgressPercent.value = Math.round((event.loaded / (event.total ?? 1)) * 100);
+}
+
+function onDownloadProgress(event: AxiosProgressEvent) : void {
+    console.log('download progress: ' + event.loaded + ' of ' + event.total);
 }
 
 function validateForm(form: HTMLFormElement) : boolean {
@@ -106,9 +124,12 @@ function download(fileMetadataId: string) {
     console.log("download file with id: " + fileMetadataId);
 }
 
+
+
 function viewComments(songRevisionId: string) {
-    console.log('view comments for song revision id: ' + songRevisionId);
-    SessionStorageService.setSessionStorageItem('currentSongRevision', songRevisionId);
+    currentSongRevisionId.value = songRevisionId;
+    console.log('view comments for song revision id: ' + currentSongRevisionId.value);
+    SessionStorageService.setSessionStorageItem('currentSongRevisionId', currentSongRevisionId.value);
     var linkEle = document.querySelector('a[href="#comments-tab"]') as HTMLElement;
     linkEle.click();
 }
@@ -159,7 +180,10 @@ function bytesToSizeString(bytes: number) {
                         </div>
                         <button type="submit" class="btn btn-primary mt-4">
                             {{ uploading ? "Uploading" : "Upload" }}
-                            <span v-if="uploading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span v-if="uploading === true">
+                                <span v-if="uploadProgressPercent">{{ uploadProgressPercent }}% </span>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </span>
                         </button>
                     </form>
                 </div>
@@ -195,7 +219,7 @@ function bytesToSizeString(bytes: number) {
             </div>
         </div>
         <div class="tab-pane fade" id="comments-tab" role="tabpanel">
-            
+            <SongRevisionComments v-if="currentSongRevisionId !== null && currentSong !== null"  :song="currentSong" :songRevsionId="currentSongRevisionId" />
         </div>
     </div>
 </template>

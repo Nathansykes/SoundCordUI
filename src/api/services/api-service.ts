@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, type AxiosProgressEvent } from "axios";
 import ApplicationUser from "@/application-user";
 import ApiAccountService from "./account-service";
 import router from "@/router";
@@ -33,19 +33,39 @@ const apiClient = axios.create({
         })
 });
 
+export type onProgress = ((event: AxiosProgressEvent) => void) | null;
+
 class ApiService {
     
-    private async sendRequest<T>(url: string, method: string, data: any | null): Promise<T> {
-        return (await apiClient.request<T>({ url: url, method: method, data: data })).data;
+    private async sendRequest<T>(url: string, method: string, data: any | null, uploadProgress: onProgress = null, downloadProgress: onProgress = null): Promise<T> {
+        
+        const request = {
+            url: url,
+            method: method,
+            data: data,
+            onUploadProgress (event : AxiosProgressEvent) {
+                if (uploadProgress != null){
+                    uploadProgress(event);
+                }
+            },
+            onDownloadProgress (event : AxiosProgressEvent) {
+                if (downloadProgress != null){
+                    downloadProgress(event);
+                }
+            }
+        }
+        return (await apiClient.request<T>(request)).data;
     }
     
     private async trySendRequest<T>(
         url: string,
         method: string,
-        data: any
+        data: any,
+        uploadProgress: onProgress = null, 
+        downloadProgress: onProgress = null
     ): Promise<T> {
         try {
-            return await this.sendRequest<T>(url, method, data);
+            return await this.sendRequest<T>(url, method, data, uploadProgress, downloadProgress);
         } catch (error) {
             const axiosError = error as AxiosError;
             try {
@@ -53,7 +73,7 @@ class ApiService {
                     const token = await ApiAccountService.Refresh();
                     if (token != null) {
                         apiClient.defaults.headers["Authorization"] = "Bearer " + token.accessToken;
-                        return await this.sendRequest<T>(url, method, data);
+                        return await this.sendRequest<T>(url, method, data, uploadProgress, downloadProgress);
                     }
                 }
             } catch (refreshError) {
@@ -65,12 +85,12 @@ class ApiService {
         }
     }
 
-    public async get<T>(url: string, data: any | null = null): Promise<T> {
-        return await this.trySendRequest<T>(url, "GET", data);
+    public async get<T>(url: string, data: any | null = null, uploadProgress: onProgress = null, downloadProgress: onProgress = null): Promise<T> {
+        return await this.trySendRequest<T>(url, "GET", data, uploadProgress, downloadProgress);
     }
 
-    public async post<T>(url: string, data: any | null = null): Promise<T> {
-        return await this.trySendRequest<T>(url, "POST", data);
+    public async post<T>(url: string, data: any | null = null, uploadProgress: onProgress = null, downloadProgress: onProgress = null): Promise<T> {
+        return await this.trySendRequest<T>(url, "POST", data, uploadProgress, downloadProgress);
     }
 }
 

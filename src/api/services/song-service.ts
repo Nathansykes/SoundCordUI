@@ -1,5 +1,6 @@
-import type { Song, SongRevision } from "../models";
+import type { Message, Song, SongRevision } from "../models";
 import ApiService from "./api-service";
+import type { onProgress } from "./api-service";
 
 class ApiSongService {
     public async getSongs(groupId: string) : Promise<Song[]>  {
@@ -20,7 +21,19 @@ class ApiSongService {
         return await ApiService.get<SongRevision>(`/songs/${songId}/revisions/${revisionId}`);
     }
 
-    public async createSongRevision(songId: string, revisionName: string, fileName: string, base64Content: string, contentType: string | undefined, lengthMilliseconds: number) : Promise<SongRevision> {
+    public async getSongRevisionComments(channelId: string, revisionId: string) : Promise<Message[]>  {
+        return await ApiService.get<Message[]>(`/messages/${channelId}/songrevisions/${revisionId}`);
+    }
+
+    public async createSongRevision(
+        songId: string, 
+        revisionName: string, 
+        fileName: string, 
+        base64Content: string, 
+        contentType: string | undefined, 
+        lengthMilliseconds: number, 
+        uploadProgress: onProgress = null, 
+        downloadProgress: onProgress = null) : Promise<SongRevision> {
         
         const parts = fileName.split(".");
         
@@ -41,7 +54,7 @@ class ApiSongService {
 
         
         
-        return await ApiService.post<SongRevision>(`/songs/${songId}/revisions`, data);
+        return await ApiService.post<SongRevision>(`/songs/${songId}/revisions`, data, uploadProgress, downloadProgress);
     }
 }
 
