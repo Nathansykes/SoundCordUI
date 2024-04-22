@@ -143,9 +143,12 @@ function handleClickForPopover(event: MouseEvent) {
                 sec.innerText = padTime(seconds);
             }
 
-            if(arrow) {
-                arrow.style.left = ((popoverRect.width / 2) - 8) + 'px';
-            }
+            window.setTimeout(() => {
+                if(arrow) {
+                    arrow.style.left = ((popoverRect.width / 2) - 8) + 'px';
+                }
+            }, 100);
+            
         
             return;
         } else if (!pointWithinRect(mousePosition, popoverRect!)) {
