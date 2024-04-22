@@ -3,6 +3,7 @@ body {
     --main-content-width: initial;
     --navbar-height: initial;
     --inner-content-height: initial;
+    --chat-start-y: initial;
 }
 
 
@@ -54,24 +55,33 @@ input.text-bg-light::placeholder {
 
 .channel {
     margin: auto;
-    height: calc(var(--inner-content-height) - 10px);
-    max-height: calc(var(--inner-content-height) - 10px);
 }
 
 .chat-input {
     padding: 10px;
+    position: fixed;
+    bottom: 0;
+    max-width: 1100px;
+}
+
+@media (min-width: 992px) {
+    .chat-input {
+        width: 1100px;
+    }
 }
 
 
 .chat {
+    /*--chat-input-height: calc(var(--window-inner-height) -);*/
+    --chat-height: calc(var(--chat-input-start-y) - var(--chat-start-y));
     --rad: 20px;
     --rad-sm: 3px;
     display: flex;
     flex-direction: column;
     padding: 20px;
     margin: auto;
-    max-height: 83%;
-    min-height: 83%;
+    max-height: var(--chat-height);
+    min-height: var(--chat-height);
     overflow-y: scroll;
 
     /* Internet Explorer 10+ */
@@ -85,12 +95,6 @@ input.text-bg-light::placeholder {
     display: none;
 }
 
-@media (min-width: 992px) {
-    .chat {
-        max-height: 90%;
-        min-height: 90%;
-    }
-}
 
 .msg {
     position: relative;

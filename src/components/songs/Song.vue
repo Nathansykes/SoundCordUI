@@ -77,6 +77,7 @@ async function fileUploadSubmit(event: Event) {
                 } catch (error) {
                     console.error(error);
                 }
+                newRevisionName = '';
                 resetForm(form);
                 uploading.value = false;
 
@@ -133,18 +134,25 @@ function showFiles(){
 
 }
 
+function setHeights() {
+    const channel = document.querySelector('.channel') as HTMLElement;
+    const chatInput = document.querySelector('.chat-input') as HTMLElement;
+    document.body.style.setProperty('--chat-input-start-y', `${chatInput.getBoundingClientRect().top}px`);
+    document.body.style.setProperty('--chat-start-y', `${channel.getBoundingClientRect().top}px`);
+}
+
 </script>
 
 <template>
     <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" data-bs-toggle="tab" href="#chat-tab" aria-selected="true" role="tab">Song Chat</a>
+            <a @click="setHeights" class="nav-link active" data-bs-toggle="tab" href="#chat-tab" aria-selected="true" role="tab">Song Chat</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#file-tab" aria-selected="false" tabindex="-1" role="tab">Files</a>
+            <a @click="setHeights" class="nav-link" data-bs-toggle="tab" href="#file-tab" aria-selected="false" tabindex="-1" role="tab">Files</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#comments-tab" aria-selected="false" tabindex="-1" role="tab">Comments</a>
+            <a @click="setHeights" class="nav-link" data-bs-toggle="tab" href="#comments-tab" aria-selected="false" tabindex="-1" role="tab">Comments</a>
         </li>
     </ul>
     <div id="myTabContent" class="tab-content" >

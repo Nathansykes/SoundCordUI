@@ -26,7 +26,7 @@ onMounted(() => {
         currentChannel.value = response;
         SessionStorageService.setJsonSessionStorageItem('currentChannel', currentChannel.value);
         apiMessageService.getMessages(props.id!).then((response) => {
-            messages.value = response;
+            messages.value = response.filter(m => m.songRevisionId == null && m.songTimestampMilliseconds == null);
             formatMessages();
         });
         ConnectionService.init();
@@ -35,6 +35,11 @@ onMounted(() => {
             ConnectionService.on("Message", receiveMessage);
         });
     });
+
+    const channel = document.querySelector('.channel') as HTMLElement;
+    const chatInput = document.querySelector('.chat-input') as HTMLElement;
+    document.body.style.setProperty('--chat-input-start-y', `${chatInput.getBoundingClientRect().top}px`);
+    document.body.style.setProperty('--chat-start-y', `${channel.getBoundingClientRect().top}px`);
 });
 
 onBeforeUnmount(() => {

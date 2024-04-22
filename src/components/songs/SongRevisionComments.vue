@@ -44,6 +44,9 @@ const audioFileService = new FileService('audio');
 const threads = ref([] as Thread[]);
 
 onMounted(async () => {
+    
+    
+
     //audioFileService.deleteFile('');
     // Call the API to get the song revision
     revision.value = await apiSongService.getSongRevision(props.songRevsionId);
@@ -52,6 +55,7 @@ onMounted(async () => {
     await ConnectionService.start();
     ConnectionService.ConnectToChannel(props.song.channelId);
     ConnectionService.on("Message", receiveMessage);
+    setHeights();
 
     addEventListeners();
 
@@ -61,6 +65,20 @@ onMounted(async () => {
     closeStartCommentPopover()
 });
 
+function setHeights() {
+    
+    const chatInput = document.getElementById('comments-chat-start');
+    if(chatInput) {
+        const rect1 = chatInput.getBoundingClientRect();
+        document.body.style.setProperty('--chat-start-y', `${rect1.top}px`);
+    }
+
+    const channel = document.getElementById('comments-chat-input');
+    if (channel) {
+        const rect2 = channel.getBoundingClientRect();
+        document.body.style.setProperty('--chat-input-start-y', `${rect2.top}px`);
+    }
+}
 
 //threads and popovers
 function addEventListeners() {
@@ -353,6 +371,8 @@ function formatMessages() {
         comments.value.sort((a, b) => {
             return a.createdAt.getTime() - b.createdAt.getTime();
         });
+        var chat = document.querySelector('.chat') as HTMLElement;
+        chat.scrollTop = chat.scrollHeight;
 
     }, 100);
 }
@@ -364,6 +384,10 @@ function setCurrentThread(timeSeconds: number) {
     if(player.value) {
         player.value.currentTime = timeSeconds;
     }
+    setTimeout(() => {
+        setHeights();
+    }, 100);
+    
 }
 
 function startThread(){
@@ -379,6 +403,7 @@ function startThread(){
 
     const popover = document.getElementById('startCommentPopover');
     popover?.classList.remove('show');
+    setCurrentThread(timeSeconds);
 }
 
 
@@ -455,12 +480,12 @@ function closeStartCommentPopover() {
         </div>
         <hr />
 
-        <div v-if="songTimestampSeconds !== null" class="comment-section">
+        <div v-if="songTimestampSeconds !== null" class="comment-section channel">
             <h4>Comment thread at: {{ padTime(getMinutesAndSeconds(songTimestampSeconds!).minutes) }}:{{ padTime(getMinutesAndSeconds(songTimestampSeconds!).seconds) }} </h4>
-            <div class="chat" >
+            <div id="comments-chat-start" class="chat" >
                 <ChannelMessage v-for="message in comments.filter(c => Math.floor(c.songTimestampMilliseconds! / 1000) === songTimestampSeconds)" :message="message" :key="message.songTimestampMilliseconds!"  />
             </div>
-            <div class="chat-input">
+            <div id="comments-chat-input" class="chat-input">
                 <form @submit.prevent="createComment" novalidate>
                     <div class="input-group mb-3 has-validation">
                         <input v-model="newComment" required type="text" class="form-control text-bg-light" placeholder="Type a message" aria-label="Type a message" aria-describedby="send-button">

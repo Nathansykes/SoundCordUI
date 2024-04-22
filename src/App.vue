@@ -89,7 +89,9 @@ function onLoadOrResizse() {
     const navbarHeight = document.getElementById("main-navbar")?.offsetHeight;
     if (navbarHeight){
         document.body.style.setProperty('--navbar-height',  `${navbarHeight}px`);
-        document.body.style.setProperty('--inner-content-height', `calc(100vh - ${navbarHeight}px)`);
+        window.innerHeight;
+        document.body.style.setProperty('--window-inner-height', `${window.innerHeight}px`);
+        document.body.style.setProperty('--inner-content-height', `calc(${window.innerHeight}px - ${navbarHeight}px)`);
     }
 }
 
