@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Message as MessageModel, SongRevision, Song, FileMetadata } from '@/api/models';
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import apiSongService from '@/api/services/song-service';
-import SessionStorageService from '@/services/session-storage-service';
 import { FileService } from '@/services/file-service';
 import type { AxiosProgressEvent } from 'axios';
 import Plyr from 'plyr';
@@ -59,6 +58,7 @@ onMounted(async () => {
     await configureAudioPlayers();
     
     loadThreads();
+    closeStartCommentPopover()
 });
 
 
@@ -101,8 +101,7 @@ function handleClickForPopover(event: MouseEvent) {
         const isOnAnyThread = rects.some(r => pointWithinRect(mousePosition, r));    
 
         if (isOnAnyThread || fileLoaded.value === false){
-            popover.classList.remove('show');
-            popover.classList.add('d-none');
+            closeStartCommentPopover()
             return;
         }
 
@@ -132,9 +131,7 @@ function handleClickForPopover(event: MouseEvent) {
         
             return;
         } else if (!pointWithinRect(mousePosition, popoverRect!)) {
-            popover.classList.remove('show');
-            popover.classList.add('d-none');
-            
+            closeStartCommentPopover()
         }
     }    
 }
@@ -412,12 +409,10 @@ function validateForm(form : HTMLFormElement) {
     return true;
 }
 
-function closeStartCommentPopover(event: MouseEvent){
-    event.preventDefault();
+function closeStartCommentPopover() {
     const popover = document.getElementById('startCommentPopover');
     popover?.classList.remove('show');
     popover?.classList.add('d-none');
-
 }
 
 </script>
