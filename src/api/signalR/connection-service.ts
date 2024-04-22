@@ -84,6 +84,14 @@ export default class ConnectionService {
             console.error(error);
         }
     }
+
+    public static async SendSongRevisionMessage(channelId: string, content: string, songRevisionId: string, songTimestampMilliseconds: number) {
+        try {
+            await this.send("Message", new songRevisionTimeStampRequest(channelId, content, songRevisionId, songTimestampMilliseconds));
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 class channelRequest
@@ -92,6 +100,29 @@ class channelRequest
         this.channelId = channelId;
     }
     channelId: string;
+}
+
+class songRevisionTimeStampRequest {
+    
+    constructor(channelId: string, content: string, songRevisionId: string, songTimestampMilliseconds: number) {
+        this.channelId = channelId;
+        this.message = new songRevisionTimeStampMessageRequest(content, songRevisionId, songTimestampMilliseconds);}
+
+    channelId: string;
+    message: songRevisionTimeStampMessageRequest;
+}
+
+class songRevisionTimeStampMessageRequest {
+
+    constructor(content: string, songRevisionId: string, songTimestampMilliseconds: number) {
+        this.content = content;
+        this.songRevisionId = songRevisionId;
+        this.songTimestampMilliseconds = songTimestampMilliseconds;
+    }
+    
+    content: string;
+    songRevisionId: string
+    songTimestampMilliseconds: number;
 }
 
 class messageRequest {
