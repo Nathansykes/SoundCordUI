@@ -98,9 +98,9 @@ function handleClickForPopover(event: MouseEvent) {
         const allThreadPopovers = document.querySelectorAll('.threadPopover');
         const rects = Array.from(allThreadPopovers).map(p => p.getBoundingClientRect());
 
-        const isOnAnyThread = rects.some(r => pointWithinRect(mousePosition, r));
-    
-        if (isOnAnyThread){
+        const isOnAnyThread = rects.some(r => pointWithinRect(mousePosition, r));    
+
+        if (isOnAnyThread || fileLoaded.value === false){
             popover.classList.remove('show');
             popover.classList.add('d-none');
             return;
@@ -108,12 +108,12 @@ function handleClickForPopover(event: MouseEvent) {
 
 
         if ((pointWithinRect(mousePosition, sectionRect) && popover.classList.contains('show')) || pointWithinRect(mousePosition, timelineRect)) {
+            popover.classList.add('show');
+            popover.classList.remove('d-none');
+
             popover.style.left = mousePosition.x + 'px';
             popover.style.top = (timelineRect.top + 12) + 'px';
-            console.log(popoverRect.width);
-            if(arrow) {
-                arrow.style.left = ((popoverRect.width / 2) - 8) + 'px';
-            }
+            
             const min = document.getElementById('startCommentMins');
             const sec = document.getElementById('startCommentSecs');
 
@@ -125,10 +125,16 @@ function handleClickForPopover(event: MouseEvent) {
                 min.innerText = padTime(minutes);
                 sec.innerText = padTime(seconds);
             }
-            popover.classList.add('show');
-            popover.classList.remove('d-none');
+
+            if(arrow) {
+                arrow.style.left = ((popoverRect.width / 2) - 8) + 'px';
+            }
         
             return;
+        } else if (!pointWithinRect(mousePosition, popoverRect!)) {
+            popover.classList.remove('show');
+            popover.classList.add('d-none');
+            
         }
     }    
 }
@@ -406,6 +412,14 @@ function validateForm(form : HTMLFormElement) {
     return true;
 }
 
+function closeStartCommentPopover(event: MouseEvent){
+    event.preventDefault();
+    const popover = document.getElementById('startCommentPopover');
+    popover?.classList.remove('show');
+    popover?.classList.add('d-none');
+
+}
+
 </script>
 
 
@@ -470,14 +484,16 @@ function validateForm(form : HTMLFormElement) {
 
 
 
-    <div class="popover bs-popover-auto fade" role="tooltip" id="startCommentPopover" style="max-width:130px;position: absolute; transform: translate(-50%, 3px);" data-popper-placement="bottom">
+    <div class="popover bs-popover-auto fade" role="tooltip" id="startCommentPopover" 
+         style="max-width:130px;position: absolute; transform: translate(-50%, 3px);" 
+         
+         data-popper-placement="bottom">
         <div class="popover-arrow" style="position: absolute;">
-
         </div>
         <h3 class="popover-header text-center" id="startCommentPopoverTitle" >
-            <span id="startCommentMins" contenteditable >00</span>
+            <span id="startCommentMins" >00</span>
             <span>:</span>
-            <span id="startCommentSecs" contenteditable>00</span>
+            <span id="startCommentSecs">00</span>
         </h3>
         <div class="popover-body" id="startCommentPopoverBody">
             <button class="btn btn-primary" @click="startThread" >
