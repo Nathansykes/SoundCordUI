@@ -110,9 +110,6 @@ function sortFiles() {
     });
 }
 
-function download(fileMetadataId: string) {
-    console.log("download file with id: " + fileMetadataId);
-}
 
 
 
@@ -188,8 +185,7 @@ function showFiles(){
                 <div v-for="songRev in files" :key="songRev.id"  class="card text-white bg-dark mb-3" >
                     <div class="card-header">
                         {{ songRev.revisionName }} <br />
-                        <a @click="download(songRev.fileMetadataId)" href="#">Download</a> | 
-                        <a @click="viewComments(songRev.id)" href="#">View Comments</a>
+                        <a @click="viewComments(songRev.id)" href="#">Open</a>
                     </div>
                     <div class="card-body">
                         <p class="card-title">Uploaded: {{ getDateString(songRev.createdUtc) }}</p>
