@@ -123,7 +123,7 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                                 </ul>
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <i>By registering you confirm you have read and agree to the <a href="/participant_information_sheet.pdf">Participant Information Sheet</a></i><br>
+                                <i>By registering you confirm you have read and agree to the <a target="_blank" href="/participant_information_sheet.pdf">Participant Information Sheet</a></i><br>
                                 <button :disabled="loading === true" type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Register <span v-if="loading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
                                 <p class="small mt-2 pt-1 mb-0">
                                     Already have an account?
