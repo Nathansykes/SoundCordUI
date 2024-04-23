@@ -77,8 +77,9 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
         <section class="vh-100">
             <div class="container-fluid h-custom">
                 <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col-md-9 col-lg-6 col-xl-5">
+                    <div class="col-md-9 col-lg-6 col-xl-5 text-center">
                         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image" />
+                        <a class="" target="_blank" href="/guides_and_tutorials.pdf">Guides and Tutorials</a>
                     </div>
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 ">
                         <form id="resetForm" class="needs-validation" @submit="resetSubmit" novalidate >

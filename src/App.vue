@@ -105,8 +105,8 @@ function onLoadOrResizse() {
 
 <template>
 
-    <div v-if="currentUser != null && currentGroup != null">
-        <div v-if="isChoosingGroup">
+    <div class="if current user and current group" v-if="currentUser != null && currentGroup != null">
+        <div class="is choosing group" v-if="isChoosingGroup === true">
             <Sidebar />
             <div id="main-content" style="">
                 <Navbar />
@@ -114,7 +114,7 @@ function onLoadOrResizse() {
                 </div>
             </div>
         </div>
-        <div v-else>
+        <div class="is not choosing group" v-if="isChoosingGroup === false">
             <Sidebar />
             <div id="main-content" style="">
                 <Navbar />
@@ -124,11 +124,11 @@ function onLoadOrResizse() {
             </div>
         </div>
     </div>
-    <div v-else>
+    <div class="thElse" v-else-if=" currentUser == null || currentGroup">
         <router-view :key="$route.fullPath"  />
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

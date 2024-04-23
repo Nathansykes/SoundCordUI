@@ -257,7 +257,8 @@ function closeSidebar(){
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
                     <li><router-link to="/choosegroup" class="dropdown-item">Switch Group</router-link></li>
                     <li><a @click="openLeaveGroup" href="#" class="dropdown-item">Leave Group</a></li>
-                    <li><a target="_blank" class="dropdown-item" href="https://1drv.ms/w/s!AibZr8VIsI4jgZcYamoSizDdn4zFmQ?e=zCy9Xl">Participant Information Sheet</a></li>
+                    <li><a target="_blank" class="dropdown-item" href="/participant_information_sheet.pdf">Participant Information Sheet</a></li>
+                    <li><a target="_blank" class="dropdown-item" href="/guides_and_tutorials.pdf">Guides and Tutorials</a></li>
                     <!-- <li><router-link to="/settings" class="dropdown-item">Settings</router-link></li> -->
                     <li><hr class="dropdown-divider"></li>
                     <li><a @click="logOut" href="#" class="dropdown-item">Log Out</a></li>

@@ -455,7 +455,7 @@ function closeStartCommentPopover() {
                 <a  href="#">Download now</a>
             </span>
             <p v-if="downloading == true" > {{ downloadProgressPercent }}%</p>
-            <div :class="fileLoaded === null ? 'invisible' : ''">
+            <div :class="fileLoaded === false || fileLoaded === null ? 'invisible' : ''">
                 <div class="audio-player">
                     <button title="Save Locally" @click="download" type="button" class="btn btn-primary btn-sm float-end"><i class="bi bi-download fs-5"></i></button>
                     <audio id="song-player" style="width:100%" >
