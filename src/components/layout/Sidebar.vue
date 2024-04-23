@@ -259,6 +259,7 @@ function closeSidebar(){
                     <li><a @click="openLeaveGroup" href="#" class="dropdown-item">Leave Group</a></li>
                     <li><a target="_blank" class="dropdown-item" href="/participant_information_sheet.pdf">Participant Information Sheet</a></li>
                     <li><a target="_blank" class="dropdown-item" href="/guides_and_tutorials.pdf">Guides and Tutorials</a></li>
+                    <li><a target="_blank" class="dropdown-item" href="https://forms.gle/JpqaEQVFhoNPW4Th6">Feedback Form</a></li>
                     <!-- <li><router-link to="/settings" class="dropdown-item">Settings</router-link></li> -->
                     <li><hr class="dropdown-divider"></li>
                     <li><a @click="logOut" href="#" class="dropdown-item">Log Out</a></li>
