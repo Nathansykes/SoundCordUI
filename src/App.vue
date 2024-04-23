@@ -21,6 +21,10 @@ onMounted(() => {
     onLoadOrResizse();
     checkLogin();
 
+    if(!ApplicationUser.isLoggedIn()){
+        return;
+    }
+
     if (currentGroup.value == null){
         if (router.currentRoute.value.name !== 'Choose Group') {
             router.push({name: 'Choose Group'});
