@@ -30,7 +30,14 @@ onMounted(() => {
 
     apiGroupService.getGroups().then((response) => {
         groups.value = response;
-        if ((!currentGroup.value) || !groups.value.find(g => g.id === currentGroup.value?.id)) {
+
+        const targetGroup = groups.value.find(g => g.id === currentGroup.value?.id);
+        if(currentGroup.value && targetGroup) {
+            currentGroup.value = targetGroup;
+            ApplicationUser.setCurrentGroup(currentGroup.value);
+        }
+        
+        if ((!currentGroup.value) || !targetGroup) {
             currentGroup.value = groups.value[0];
             if (!currentGroup.value) {
                 ApplicationUser.removeCurrentGroup();
@@ -38,6 +45,9 @@ onMounted(() => {
                 return;
             }
             ApplicationUser.setCurrentGroup(currentGroup.value);
+        }
+        if(currentGroup.value){
+            users.value = currentGroup.value.users;
         }
     }).then(() => {
         if(!currentGroup.value) return;
@@ -109,6 +119,7 @@ function closeCreateSong() {
 const addingUser = ref(false);
 const errors = ref([] as string[]);
 var username: string;
+const users = ref([] as string[]);
 
 function closeUser(success: boolean){
     addingUser.value = false;
@@ -139,6 +150,7 @@ async function addUser(event : Event){
     try {
         const currentGroup = ApplicationUser.getCurrentGroup();
         await apiGroupService.addUserToGroup(currentGroup!.id, username);
+        users.value.push(username);
         closeUser(true);
     } catch (error: any) {
         if(error.response?.status === 400) {
@@ -190,7 +202,8 @@ function closeSidebar(){
         <div :class="(store.isMobile ? 'offcanvas' : '')  +' offcanvas-start offcanvas-body d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar-offcanvas'" tabindex="-1" id="main-sidebar-offcanvas" aria-labelledby="main-sidebar-offcanvasLabel">
             <div class="align-items-center text-white text-decoration-none">
                 <span class="fs-4" style="margin-top:4px">
-                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span> <button type="button" @click="openUser" class="btn btn-sm"><i class="bi bi-person-plus fs-5"></i></button>
+                    <span @click="router.push({name: 'Home'})" class="clickable">{{ currentGroup?.groupName }}</span> 
+                    
                     <button id="close-sidebar-btn" class="btn btn-sm d-lg-none float-end padding-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-sidebar-offcanvas" aria-controls="main-sidebar-offcanvas" role="button" title="Toggle Sidebar">
                         <i class="bi bi-x-lg fs-5 "></i>
                     </button>
@@ -226,6 +239,11 @@ function closeSidebar(){
                 </form>
                 <li class="nav-item" v-for="song in songs" :key="song.id" >
                     <router-link @click="closeSidebar" :to="`/songs/${song.id}/`" class="nav-link text-white clickable channel-sidebar-link" aria-current="page">{{ song.songName }}</router-link>  
+                </li>
+                <hr />
+                <i>Users <button class="btn btn-sm btn-secondary float-end" title="Open Add User" @click="openUser"><i class="bi bi-person-plus fs-7"> </i> </button></i>
+                <li class="nav-item" v-for="user in users" :key="user" >
+                    <span class="nav-link text-white">{{ user }}</span>
                 </li>
             </ul>
           

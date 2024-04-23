@@ -36,4 +36,9 @@ export default class SessionStorageService {
         sessionStorage.removeItem(key);
         window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { key } }));
     }
+
+    public static clear(){
+        sessionStorage.clear();
+        window.dispatchEvent(new CustomEvent('sessionstorage', { detail: { } }));
+    }
 }

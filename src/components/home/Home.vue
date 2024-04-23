@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import SessionStorageService from '@/services/session-storage-service';
+
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    SessionStorageService.clear();
+});
 
 </script>
 

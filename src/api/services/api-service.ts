@@ -24,12 +24,16 @@ class ApiService {
                 "Access-Control-Allow-Origin": "*",
                 Authorization: "Bearer " + ApplicationUser.getToken()?.accessToken,
             },
-            transformResponse: (data) =>
-                JSON.parse(data, (key, value) => {
+            transformResponse: (data) =>{
+
+                if(data === null || data === undefined || data === "") {
+                    return null;
+                }
+                return JSON.parse(data, (key, value) => {
                     if (key.toLowerCase().endsWith('at') 
                             || key.toLowerCase().includes('utc') 
-                            || key.toLowerCase().includes('date')) {
-                        
+                        || key.toLowerCase().includes('date')) {
+                            
                         const date = new Date(value);
                         if (isNaN(date.getDate())) {
                             return value;
@@ -41,6 +45,7 @@ class ApiService {
                     }
                     return value;
                 })
+            }
         });
     }
 
@@ -63,7 +68,8 @@ class ApiService {
                 }
             }
         }
-        return (await this.apiJSONClient.request<T>(request)).data;
+        const response = (await this.apiJSONClient.request<T>(request))
+        return response.data;
     }
     
     private async trySendRequest<T>(
