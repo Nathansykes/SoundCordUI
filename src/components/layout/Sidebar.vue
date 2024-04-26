@@ -218,6 +218,10 @@ const isExampleGroup = computed(() => {
             </div>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
+                <div v-if="isExampleGroup">
+                    <i>This is a readonly group for the purpose of showcasing the available functionality. You will not be able to send any messages/leave comments etc while viewing this group.</i>
+                </div>
+                <hr v-if="isExampleGroup" />
                 <i>Text Channels <button class="btn btn-sm btn-secondary float-end" title="Open Create Channel" @click="toggleCreateChannel"><i :class="`bi bi-${creatingChannel ? 'x' : 'plus'}-lg`" ></i></button></i>
                 <form v-if="creatingChannel" @submit="createChannelConfirm" style="margin-top:5px">
                     <label class="d-none" title="ChannelName" for="channel-name"></label>

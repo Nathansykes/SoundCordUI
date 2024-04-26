@@ -8,6 +8,8 @@ import Plyr from 'plyr';
 import ConnectionService from '@/api/signalR/connection-service';
 import WaveSurfer from 'wavesurfer.js'
 import ChannelMessage from '../messages/ChannelMessage.vue';
+import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js'
+
 
 class Thread {
     constructor(position_x: number, position_y: number, timeSeconds: number, commentsCount: number) {
@@ -109,7 +111,7 @@ function handleClickForPopover(event: MouseEvent) {
 
     if (section && timeline && popover) {
         const sectionRect = section.getBoundingClientRect();
-        const timelineRect = timeline.getBoundingClientRect();
+        
         const popoverRect = popover.getBoundingClientRect();
         const mousePosition = { x: event.clientX, y: event.clientY };
 
@@ -123,13 +125,15 @@ function handleClickForPopover(event: MouseEvent) {
             return;
         }
 
+        const { top, left, bottom, right, width, height } = timeline.getBoundingClientRect();
+        const timelineRect = { top: top - 20, left, bottom, right, width, height };
 
         if ((pointWithinRect(mousePosition, sectionRect) && popover.classList.contains('show')) || pointWithinRect(mousePosition, timelineRect)) {
             popover.classList.add('show');
             popover.classList.remove('d-none');
 
             popover.style.left = mousePosition.x + 'px';
-            popover.style.top = (timelineRect.top + 12) + 'px';
+            popover.style.top = (timelineRect.top + 38) + 'px';
             
             const min = document.getElementById('startCommentMins');
             const sec = document.getElementById('startCommentSecs');
@@ -234,6 +238,7 @@ async function configureAudioPlayers() {
         dragToSeek: {
             debounceTime: 50
         },
+        plugins: [TimelinePlugin.create()]
     })
 
     wavesurfer.value.on('dragstart', () => {
@@ -464,6 +469,7 @@ function closeStartCommentPopover() {
                 </div>
                 <div id="waveform"></div>
                 <div class="timeline">
+                    
                     <div v-for="thread in threads" :key="thread.position_x" @click="setCurrentThread(thread.timeSeconds)" >
                         <div class="popover bs-popover-auto fade show threadPopover" role="tooltip" :id="'threadCommentPopover-' + thread.timeSeconds.toString()" data-popper-placement="bottom"
                              :style="`max-width:50px;
@@ -545,8 +551,6 @@ function closeStartCommentPopover() {
     /*display: flex;
     justify-content: center;
     align-items: center;*/
-    margin-top: 20px;
-    border-top: solid 2px var(--bs-body-color);
     min-height: 60px;
 }
 .wide-text {
