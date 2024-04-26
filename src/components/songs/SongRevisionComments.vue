@@ -484,6 +484,24 @@ function closeStartCommentPopover() {
                             </div>
                         </div>
                     </div>
+                    <br />
+                </div>
+                <div id="commentPrompt" class="row">
+                    <div class="col-1 col-md-3">
+                        <i class="bi bi-arrow-up-left float-end"></i>
+                    </div>
+                    <div class="col-10 col-md-6 text-center">
+                        <span  class="text-body-tertiary" style="position:relative;pointer-events:none;z-index:9999">
+                            Click in the blank space above to start a comment thread 
+                        </span>
+                    </div>
+                    <div class="col-1 col-md-3">
+                        <i class="bi bi-arrow-up-right"></i>
+                    </div>
+                </div>
+                <div id="commentPrompt" class="text-center">
+                    
+                    
                 </div>
             </div>
         </div>
@@ -514,8 +532,7 @@ function closeStartCommentPopover() {
 
 
     <div class="popover bs-popover-auto fade" role="tooltip" id="startCommentPopover" 
-         style="max-width:130px;position: absolute; transform: translate(-50%, 3px);" 
-         
+         style="max-width:130px;position: absolute; transform: translate(-50%, 3px); z-index:10000" 
          data-popper-placement="bottom">
         <div class="popover-arrow" style="position: absolute;">
         </div>
@@ -569,6 +586,10 @@ function closeStartCommentPopover() {
 
 .threadPopover span {
     cursor: pointer;
+}
+
+#commentPrompt {
+    margin-top: 8px;
 }
 
 </style>
