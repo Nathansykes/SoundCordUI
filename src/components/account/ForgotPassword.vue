@@ -54,7 +54,7 @@ onMounted(() => {
                             </p>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username" title="Username" ></label>
-                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a username" autocomplete="true" required  />
+                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter a username" autocomplete="true" required  />
                             </div>
                             <div class="text-center text-danger" v-if="errors.length > 0">
                                 <ul>
@@ -62,7 +62,7 @@ onMounted(() => {
                                 </ul>
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <button :disabled="sent === true" type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Send email</button>
+                                <button :disabled="sent === true" type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Send email</button>
                             </div>
                             <p class="small mt-2 pt-1 mb-0">
                                 <router-link to="/account/login">Back to Login</router-link>

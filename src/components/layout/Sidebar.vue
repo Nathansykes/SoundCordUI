@@ -2,7 +2,7 @@
 import router from '@/router';
 import store from '../../store';
 import ApplicationUser from '@/application-user';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { Group, Song, Channel } from '@/api/models';
 import apiGroupService from '@/api/services/group-service';
 import apiChannelService from '@/api/services/channel-service';
@@ -48,6 +48,9 @@ onMounted(() => {
         }
         if(currentGroup.value){
             users.value = currentGroup.value.users;
+            if(isExampleGroup.value){
+                users.value = users.value.filter(u => u.includes('ExampleUser'))
+            }
         }
     }).then(() => {
         if(!currentGroup.value) return;
@@ -195,6 +198,10 @@ function closeSidebar(){
     }
 }
 
+const isExampleGroup = computed(() => {
+    return currentGroup.value?.id?.toUpperCase() == 'F8E94F19-6301-EF11-AAF0-6045BD13BBCF';
+})
+
 </script>
 
 <template>
@@ -299,7 +306,7 @@ function closeSidebar(){
                                             </div>
                                         </div>
                                         <div class="text-center text-lg mt-4 pt-2">
-                                            <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Confirm</button>
+                                            <button type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Confirm</button>
                                         </div>
                                     </form>
                                 </div>
@@ -318,7 +325,7 @@ function closeSidebar(){
                                         <div v-else>
                                             <h3>Are you sure you want to leave the group: {{ currentGroup?.groupName }}</h3>
                                             <br />
-                                            <button @click="leaveGroupConfirm" type="submit" class="btn btn-danger btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Leave</button>
+                                            <button @click="leaveGroupConfirm" type="submit" class="btn btn-danger btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Leave</button>
                                         </div>
                                     </div>
                                 </div>

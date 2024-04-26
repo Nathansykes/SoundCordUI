@@ -59,11 +59,11 @@ onMounted(() => {
                             <p class="text-success" v-else-if="state=='reset'">Password reset sucessful, please login again</p>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username" title="Username" ></label>
-                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a username" autocomplete="true" required  />
+                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter a username" autocomplete="true" required  />
                             </div>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="password" title="Password"></label>
-                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light" placeholder="Enter password" autocomplete="true" required />
+                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter password" autocomplete="true" required />
                                 <div class="invalid-feedback">
                                     Please enter a password
                                 </div>
@@ -74,7 +74,7 @@ onMounted(() => {
                                 </ul>
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <button :disabled="loading === true" type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Login <span v-if="loading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
+                                <button :disabled="loading === true" type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Login <span v-if="loading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
                                 <p class="small mt-2 pt-1 mb-0">
                                     Don't have an account?
                                     <router-link to="/account/register">Register </router-link>

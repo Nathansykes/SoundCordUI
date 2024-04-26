@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Sidebar from './components/layout/Sidebar.vue';
 import Navbar from './components/layout/Navbar.vue';
 import store from './store';
@@ -45,7 +45,35 @@ onMounted(() => {
         m?.show();
         
     });
+
+    setInterval(() => {
+        if (isExampleGroup.value) {
+            obfuscate();
+        }
+    }, 500)
 });
+
+const isExampleGroup = computed(() => {
+    return currentGroup.value?.id?.toUpperCase() == 'F8E94F19-6301-EF11-AAF0-6045BD13BBCF';
+})
+
+function obfuscate(){
+    const allInputs = document.querySelectorAll('input');
+    allInputs.forEach((input) => {
+        if(input.classList.contains('no-obfuscate')) {
+            return;
+        }
+        input.disabled = true;
+    });
+
+    const allSubmitButtons = document.querySelectorAll('button[type="submit"]');
+    allSubmitButtons.forEach((button) => {
+        if(button.classList.contains('no-obfuscate')) {
+            return;
+        }
+        (button as HTMLButtonElement).disabled = true;
+    });
+}
 
 function checkLogin() {
     if(window.location.href.includes("/account/")) {

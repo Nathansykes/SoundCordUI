@@ -93,7 +93,7 @@ onMounted(() => {
                                     </div>
                                 </div>
                                 <div class="text-center text-lg mt-4 pt-2">
-                                    <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Confirm</button>
+                                    <button type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Confirm</button>
                                 </div>
                             </form>
                         </div>
@@ -105,10 +105,10 @@ onMounted(() => {
                             <form class="needs-validation text-center" @submit="createGroupSubmit" novalidate >
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="newGroupName" title="New Group Name" ></label>
-                                    <input v-model="newGroupName" type="text" name="newGroupName" id="newGroupName" class="form-control form-control-lg text-bg-light" placeholder="New Group Name" autocomplete="true" required  />
+                                    <input v-model="newGroupName" type="text" name="newGroupName" id="newGroupName" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="New Group Name" autocomplete="true" required  />
                                 </div>
                                 <div class="text-center text-lg mt-4 pt-2">
-                                    <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Create</button>
+                                    <button type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Create</button>
                                 </div>
                                 <br />
                                 <div v-if="groups.length == 0">

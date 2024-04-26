@@ -86,7 +86,7 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                             <h1>Reset Password</h1>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="password" title="Password"></label>
-                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$"  placeholder="Enter new password" autocomplete="true" required />
+                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light no-obfuscate" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$"  placeholder="Enter new password" autocomplete="true" required />
                                 <div class="invalid-feedback">
                                     Please enter a valid password, must contain:<br />
                                     <ul>
@@ -100,7 +100,7 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                             </div>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="confirmpassword" title="Confirm Password"></label>
-                                <input v-model="confirmpassword" type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg text-bg-light" placeholder="Enter password again" autocomplete="true" required />
+                                <input v-model="confirmpassword" type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter password again" autocomplete="true" required />
                                 <div class="invalid-feedback">
                                     Password must match
                                 </div>
@@ -111,7 +111,7 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                                 </ul>
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <button type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Reset</button>
+                                <button type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Reset</button>
                                 <p class="small mt-2 pt-1 mb-0">
                                     <router-link to="/account/login">Back to Login</router-link>
                                 </p>

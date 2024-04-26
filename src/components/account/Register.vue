@@ -87,18 +87,18 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                             <h1>Register</h1>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username" title="Username" ></label>
-                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light" placeholder="Enter a unique username" autocomplete="true" required  />
+                                <input v-model="username" type="text" name="username" id="username" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter a unique username" autocomplete="true" required  />
                             </div>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="email" title="Email address" ></label>
-                                <input v-model="email" type="email" name="email" id="email" class="form-control form-control-lg text-bg-light" placeholder="Enter a valid email address" autocomplete="true" required  />
+                                <input v-model="email" type="email" name="email" id="email" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter a valid email address" autocomplete="true" required  />
                                 <div class="invalid-feedback">
                                     Please enter a valid email address
                                 </div>
                             </div>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="password" title="Password"></label>
-                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$"  placeholder="Enter password" autocomplete="true" required />
+                                <input v-model="password" type="password" name="password" id="password" class="form-control form-control-lg text-bg-light no-obfuscate" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$"  placeholder="Enter password" autocomplete="true" required />
                                 <div class="invalid-feedback">
                                     Please enter a valid password, must contain:<br />
                                     <ul>
@@ -112,7 +112,7 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                             </div>
                             <div class="form-outline mb-3">
                                 <label class="form-label" for="confirmpassword" title="Confirm Password"></label>
-                                <input v-model="confirmpassword" type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg text-bg-light" placeholder="Enter password again" autocomplete="true" required />
+                                <input v-model="confirmpassword" type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg text-bg-light no-obfuscate" placeholder="Enter password again" autocomplete="true" required />
                                 <div class="invalid-feedback">
                                     Password must match
                                 </div>
@@ -124,7 +124,7 @@ function isAnyEmpty(inputs: NodeListOf<HTMLInputElement>) {
                             </div>
                             <div class="text-center text-lg-start mt-4 pt-2">
                                 <i>By registering you confirm you have read and agree to the <a target="_blank" href="/participant_information_sheet.pdf">Participant Information Sheet</a></i><br>
-                                <button :disabled="loading === true" type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem">Register <span v-if="loading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
+                                <button :disabled="loading === true" type="submit" class="btn btn-primary btn-lg no-obfuscate" style="padding-left: 2.5rem; padding-right: 2.5rem">Register <span v-if="loading === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
                                 <p class="small mt-2 pt-1 mb-0">
                                     Already have an account?
                                     <router-link to="/account/login">Login</router-link>
